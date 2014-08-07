@@ -1,0 +1,67 @@
+.dropdown-menu > .active > a, 
+.dropdown-menu > .active > a:hover, 
+.dropdown-menu > .active > a:focus {
+	background-color: #333;
+}
+
+.tbp-gray-darker {
+	color: #222;
+}
+
+.tbp-gray-dark {
+	color: #333;
+}
+
+.tbp-control-label {
+	margin-right: -1em;
+}
+
+.tbp-flush-right {
+	margin-right: -12px;
+}
+
+.tbp-panel-inverse {
+	border-color: #333;
+}
+
+.tbp-panel-inverse >
+.panel-heading {
+	background-color: #333;
+	border-color: #333;
+	color: #FFF;
+}
+
+h3#tbp-edit-quiz-h3 {
+	display: inline;
+	font-weight: bold;
+}
+
+
+.tbp-question-list-header {
+	background-color: #333;
+	color: #FFF;
+}
+
+.tbp-question-list-body {
+	margin-left: 1em;
+}
+
+.tbp-question-list-links {
+	padding-left: 1.4em;
+}
+
+.tbp-question-all-unused-links {
+	padding-left: 0px;
+}
+
+.tbp-question-list-links li,
+.tbp-question-all-unused-links li {
+	display: inline;
+	padding-right: 10px;
+}
+
+.margin-right-10 {
+	margin-right: 10px;
+}
+
+
