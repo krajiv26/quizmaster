@@ -105,7 +105,6 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
           <li class="active"><i class="icon-file-alt"></i> Manage Questions</li>
         </ol>
 
-        <!-- Display conditional messages -->
         <?php echo user_form_success_msg(); ?>
         <?php echo delete_failure_msg(); ?>
 
@@ -158,7 +157,7 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
               <div class="col-lg-3">
                   <label class="control-label">&nbsp;</label>
                   <div class="input-group" style="margin-left:50%;">
-                    <button type ="reset" id="reset-search" name="reset-search" value="reset-search" class="btn btn-primary pull-right tbp-flush-right">Reset Filter</button>
+                    <button type ="reset" id="reset-search" name="reset-search" value="reset-search" class="btn btn-primary pull-right tbp-flush-right" onclick="window.location.href = 'manage-questions.php';">Reset Filter</button>
                   </div>
               </div>
                
@@ -172,23 +171,27 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
              
            
         <h2>Question List (<?php echo $total;?>) </h2>
-        <?php echo $pagination_html; ?>
+        <?php echo $pagination_html;
+        
+        ?>
 	<form name="table_select" id="table_select" action="assign-question.php" method="post">
-          <div class="col-sm-offset-10 col-sm-2" style="margin-bottom:10px;">
+           <?php if(checkUserType() == 'admin') { ?>
+            <div class="col-sm-offset-10 col-sm-2" style="margin-bottom:10px;">
              <label for="submit-assign-question"></label>
                 <button type ="submit"  id="assign-question" name="assign-question" value="assign-question" class="btn btn-primary pull-right tbp-flush-right">Assign Question</button>
            </div>
+             <?php } ?>
             <div class="table-responsive" style="clear:both;">
             <table class="table table-bordered table-hover table-striped tablesorter">
               <thead>
                 <tr>
-                  <th><input type="checkbox" id="selecctall"/></th>
+                  <?php if(checkUserType() == 'admin') { ?><th><input type="checkbox" id="selecctall"/></th><?php } ?>
                   <th>ID</i></th>
                   <th>Question Text <i class="fa fa-sort"></i></th>
                   <th>Category</th>
                   <th>Ans</th>
-                  <th>Assign</th>
-                  <th>Edit</th>
+                  <?php if(checkUserType() == 'admin') { ?><th>Assign</th>
+                  <th>Edit</th><?php } ?>
                   <!--<th>Delete</th>-->
                 </tr>
               </thead>
@@ -197,23 +200,23 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
               <?php
               $answered[0] = "<span style='color:#ff0000;'>No</span>";
               $answered[1] = "Yes";
-				$cnt = 0;
-                while($row = mysqli_fetch_assoc($questions_list)) {
-				$cnt++;
+	      $cnt = 0;
+              while($row = mysqli_fetch_assoc($questions_list)) {
+		$cnt++;
               ?>
 
                   <tr>
-                    <td><input class="checkbox1" type="checkbox" name="check[]" value="<?php echo $row['question_id']; ?>"></td>
+                    <?php if(checkUserType() == 'admin') { ?><td><input class="checkbox1" type="checkbox" name="check[]" value="<?php echo $row['question_id']; ?>"></td><?php } ?>
                     <td><?php echo $row['question_id']; ?></td>
                     <td><a onclick="$('#ans_<?php echo $row['question_id'];?>').toggle();"><?php echo $row['question_text']; ?></a></td>
                     <td><?php echo $cat[$row['category']]; ?></td>
                     <td><?php echo $answered[$row['is_answered']]; ?></td>
-                    <td>
+                    <?php if(checkUserType() == 'admin') { ?><td>
                         <a href="assign-question.php?question_id=<?php echo htmlentities($row['question_id']); ?>" ><i class="fa fa-user fa-2x"></i></a>                
                     </td>
                     <td>
                         <a href="edit-question.php?question_id=<?php echo htmlentities($row['question_id']); ?>" ><i class="fa fa-edit fa-2x"></i></a>                
-                    </td>
+                    </td><?php } ?>
                   </tr >
                     <tr id="ans_<?php echo $row['question_id'];?>" style="display:none;">
                     <td colspan="6"><?php echo get_question_answers_html($row['question_id']);?></td>

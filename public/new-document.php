@@ -4,7 +4,10 @@
 <?php require_once("../includes/db-connection.php"); ?>
 <?php include('../includes/layouts/header.php'); ?>
 
-<?php $page = "new-user.php"; ?>
+<?php $page = "new-document.php";
+$cat = get_all_category();
+
+?>
 
 <body>
 
@@ -26,10 +29,10 @@
 
     <div class="row">
       <div class="col-lg-12">
-        <h1>New User <small>Control Panel</small></h1>
+        <h1>New Document <small>Control Panel</small></h1>
         <ol class="breadcrumb">
           <li><a href="dashboard.php"><i class="icon-dashboard"></i> Dashboard</a></li>
-          <li class="active"><i class="icon-file-alt"></i> New User</li>
+          <li class="active"><i class="icon-file-alt"></i> New Document</li>
         </ol>
         <hr />
       </div><!-- /.col-lg-12 -->
@@ -46,52 +49,47 @@
       <div class="clearfix"></div>
       <div class="col-lg-offset-1 col-lg-4">
         
-        <form class="form-horizontal" action="process-new-user.php" method="post">
+        <form class="form-horizontal" action="process-new-document.php" method="post">
           <!-- Text input-->
           <div class="form-group">
-            <label for="first_name">First Name</label>
-              <input class="form-control" id="first_name" name="first_name" value="<?php echo isset($form_values['first_name']) ? $form_values['first_name'] : '' ?>" type="text" placeholder="Enter First Name" class="input-xlarge">
-          </div>
+            <label for="title">Title</label>
+              <input class="form-control" id="title" name="title" value="<?php echo $form_values["title"]; ?>" type="text" placeholder="Enter Title" class="input-xlarge">
+            </div>
 
           <!-- Text input-->
           <div class="form-group">
-            <label for="last_name">Last Name</label>
-              <input class="form-control" id="last_name" name="last_name" value="<?php echo isset($form_values['last_name']) ? $form_values['last_name'] : '' ?>" type="text" placeholder="Enter Last Name" class="input-xlarge">
-          </div>
-
-          <!-- Text input-->
-          <div class="form-group">
-            <label for="email">Email</label>
-              <input class="form-control" id="email" name="email" value="<?php echo isset($form_values['email']) ? $form_values['email'] : '' ?>" type="text" placeholder="Enter Email Address" class="input-xlarge">
+            <label for="description">Description</label>
+              <input class="form-control" id="description" name="description" value="<?php echo $form_values["description"]; ?>" type="text" placeholder="Enter Description" class="input-xlarge">
           </div>
 
           <!-- Text input-->
           <div class="form-group">
-            <label for="username">Username</label>
-              <input class="form-control" id="username" name="username" value="<?php echo isset($form_values['username']) ? $form_values['username'] : '' ?>" type="text" placeholder="Create a Username" class="input-xlarge">
+            <label for="filename">Filename</label>
+              <input class="form-control" id="filename" name="filename" value="<?php echo $form_values["filename"]; ?>" type="text" placeholder="Enter Filename" class="input-xlarge">
           </div>
 
-          <!-- Password input-->
           <div class="form-group">
-            <label for="password">Password</label>
-              <input class="form-control" id="password" name="password" type="password" placeholder="Create a Password" class="input-xlarge">
+                <label for="category control-label">Category</label>
+                <select class="form-control" name="category">
+                    <?php foreach($cat as $k=>$v)
+                    {
+                            $sel = ($k == $form_values["category"])? 'selected="selected"':'';
+                            echo '<option value="'.$k.'" '.$sel.'>'.$v.'</option>';
+                    }?>
+                </select>
+                        
           </div>
-
-          <!-- Select Basic -->
+          <!-- Text input-->
           <div class="form-group">
-            <label for="user_type">Select User Type</label>
-              <select class="form-control" id="user_type" name="user_type" class="input-xlarge" value="">
-                <option value="admin">Administrator</option>
-                <option value="teacher">Teacher</option>
-                <option value="student">Student</option>
-              </select>
+            <label for="file_type">File Type</label>
+              <input class="form-control" id="file_type" name="file_type" type="text" value="<?php echo $form_values["file_type"]; ?>" class="input-xlarge">
           </div>
 
           <!-- Button (Double) -->
           <div class="form-group pull-right">
-            <label for="submit-new-user"></label>
-              <button type ="submit" id="submit-new-user" name="submit-new-user" value="submit-new-user" class="btn btn-primary">Create New User</button>
-              <button id="reset-new-user" name="reset-new-user" onclick="resetNewUserForm()" class="btn btn-default">Reset</button>
+            <label for="submit-new-doc"></label>
+              <button type ="submit" id="submit-new-user" name="submit-new-doc" value="submit-new-doc" class="btn btn-primary">Create New Document</button>
+              <button id="reset-new-user" name="reset-new-doc" onclick="resetNewUserForm()" class="btn btn-default">Reset</button>
           </div>
         </form>
       </div><!-- /.col-lg-6 -->
