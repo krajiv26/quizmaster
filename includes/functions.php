@@ -277,6 +277,15 @@ ini_set("display_errors",1);
 
 	  	return $result;
 	}
+        function get_all_docs($where = "") {
+		global $db;
+	  	$query  = "SELECT * ";
+                $query .= "FROM document WHERE is_deleted = 0 {$where}";  
+	  	$result = mysqli_query($db, $query);
+	  	confirm_query($result);
+
+	  	return $result;
+	}
 	
 	function get_all_category() {
 		global $db;
@@ -321,6 +330,26 @@ ini_set("display_errors",1);
 		$query 	= "SELECT * ";
 		$query .= "FROM user ";
 		$query .= "WHERE user_id = {$safe_user_id} ";
+		$query .= "LIMIT 1";
+		$user_set = mysqli_query($db, $query);
+		confirm_query($user_set);
+		if($user = mysqli_fetch_assoc($user_set)) {
+			return $user;
+		} else {
+			return null;
+		}
+	}
+        
+        function get_doc_by_id($doc_id) {
+            
+		global $db;
+
+		// Sanitize input parameter prior to making query
+		$safe_doc_id = mysqli_real_escape_string($db, $doc_id);
+
+		$query 	= "SELECT * ";
+		$query .= "FROM document ";
+		$query .= "WHERE doc_id = {$safe_doc_id} AND is_deleted = 0 ";
 		$query .= "LIMIT 1";
 		$user_set = mysqli_query($db, $query);
 		confirm_query($user_set);
@@ -559,5 +588,12 @@ ini_set("display_errors",1);
 		  if($answer_data[$k] == $v) $score++;
 	  }
 	 return $score;
+  }
+  function checkUserType()
+  {
+      if(isset($_SESSION["user"]["user_type"]))
+          return $_SESSION["user"]["user_type"];
+      return false;
+      
   }
 ?>
