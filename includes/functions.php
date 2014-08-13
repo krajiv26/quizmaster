@@ -135,6 +135,8 @@ ini_set("display_errors",1);
 	}
 	function import_one_question($data){
 		global $db;
+                $correctAnwser = explode(",",$data['correct_answer']);
+                unset($data['correct_answer']);
 		$data = array_map('addslashes',$data);
 		$data = array_map('htmlentities',$data);
 		
@@ -147,9 +149,16 @@ ini_set("display_errors",1);
 		$answer4          = $data['option_4'];
 		$category         = $data['category'];
 		$explanation      = $data['explanation'];
+                $created_at = date("Y-m-d H:i:s");
 		$multi_answer = (isset($data['multi_answer']) && $data['multi_answer'] == 1)? 1 : 0;
-		$is_answered = (isset($data['correct_answer']) && intval($data['correct_answer']) > 0)? 1 : 0;
-		$created_at = date("Y-m-d H:i:s");
+                if($multi_answer == 0){
+                    $is_answered = (isset($correctAnwser[0]) && intval($correctAnwser[0]) > 0)? 1 : 0;
+                }
+                else
+                {  //multi answer
+                    $is_answered = 1;
+                }
+		
 		// Insert new question into question table
 		$query  = "INSERT INTO question (";
 		$query .= "  question_text, category, explanation, multi_answer, is_answered, created_at ";
@@ -173,7 +182,7 @@ ini_set("display_errors",1);
 		$ischecked = false;
 		  
 		// Answer 1
-		if($data['correct_answer'] == '1') { $ischecked = true; }
+		if(in_array(1,$correctAnwser)) { $ischecked = true; }
 
 		$query1  = "INSERT INTO answer (";
 		$query1 .= "  answer_text, question_id, is_correct";
@@ -193,7 +202,7 @@ ini_set("display_errors",1);
 		$ischecked = false; 
 
 		// Answer 2
-		if($data['correct_answer'] == '2') { $ischecked = true; }
+		if(in_array(2,$correctAnwser)) { $ischecked = true; }
 
 		$query2  = "INSERT INTO answer (";
 		$query2 .= "  answer_text, question_id, is_correct";
@@ -213,7 +222,7 @@ ini_set("display_errors",1);
 		$ischecked = false;
 
 		// Answer 3
-		if($data['correct_answer'] == '3') { $ischecked = true; }
+		if(in_array(3,$correctAnwser)) { $ischecked = true; }
 
 		$query3  = "INSERT INTO answer (";
 		$query3 .= "  answer_text, question_id, is_correct";
@@ -233,7 +242,7 @@ ini_set("display_errors",1);
 		$ischecked = false;
 
 		// Answer 4
-		if($data['correct_answer'] == '4') { $ischecked = true; }
+		if(in_array(4,$correctAnwser)) { $ischecked = true; }
 
 		$query4  = "INSERT INTO answer (";
 		$query4 .= "  answer_text, question_id, is_correct";
@@ -546,7 +555,7 @@ ini_set("display_errors",1);
 		while ($row = mysqli_fetch_assoc($result)) {
 		  $answer_set[$id++] = $row; 
 		  $fontClass = ($row['is_correct'] == 1)?"correct":"";
-		  $ansHtml .= $id.'. <span class="'.$fontClass.'">'.$row['answer_text'].'</span><br>';
+		  $ansHtml .= $id.'. <span class="'.$fontClass.'">'.html_entity_decode($row['answer_text']).'</span><br>';
 		}
 		$ansHtml .= '</div>';	
 		return $ansHtml;

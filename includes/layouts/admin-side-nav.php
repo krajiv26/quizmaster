@@ -11,7 +11,7 @@
 	  </ul>
 	</li>
 
-	<li class="dropdown <?php echo (($page == "manage-quizzes.php" || $page == "new-quiz.php") ? "open" : "")?>">
+	<li class="dropdown <?php echo (($page == "manage-quizzes.php" || $page == "edit-quiz.php" || $page == "new-quiz.php") ? "open" : "")?>">
 	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Quizzes <b class="caret"></b></a>
 	  <ul class="dropdown-menu">
 	    <li class="<?php echo ($page == "manage-quizzes.php" ? "active" : "")?>"><a href="manage-quizzes.php">Manage Quizzes</a></li>
@@ -20,7 +20,7 @@
 	  </ul>
 	</li>
 
-	<li class="dropdown <?php echo (($page == "manage-questions.php" || $page == "new-question.php" || $page == "import-question.php") ? "open" : "")?>">
+	<li class="dropdown <?php echo (($page == "manage-questions.php" || $page == "edit-question.php" || $page == "new-question.php" || $page == "import-question.php") ? "open" : "")?>">
 	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Questions <b class="caret"></b></a>
 	  <ul class="dropdown-menu">
 	    <li class="<?php echo ($page == "manage-questions.php" ? "active" : "")?>"><a href="manage-questions.php">Manage Questions</a></li>
@@ -34,6 +34,14 @@
 	  <ul class="dropdown-menu">
 	    <li class="<?php echo ($page == "manage-groups.php" ? "active" : "")?>"><a href="manage-groups.php">Manage Groups</a></li>
 	    <li class="<?php echo ($page == "new-group.php" ? "active" : "")?>"><a href="new-group.php">New Group</a></li>
+	  </ul>
+	</li>
+        
+        <li class="dropdown <?php echo (($page == "manage-document.php" || $page == "edit-document.php" || $page == "new-document.php") ? "open" : "")?>">
+	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Document <b class="caret"></b></a>
+	  <ul class="dropdown-menu">
+	    <li class="<?php echo ($page == "manage-document.php" ? "active" : "")?>"><a href="manage-document.php">Manage Documents</a></li>
+	    <li class="<?php echo ($page == "new-document.php" ? "active" : "")?>"><a href="new-document.php">New Document</a></li>
 	  </ul>
 	</li>
 </ul>
@@ -52,6 +60,12 @@
 	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Questions <b class="caret"></b></a>
 	  <ul class="dropdown-menu">
 	    <li class="<?php echo ($page == "manage-questions.php") ? "active" : "";?>"><a href="manage-questions.php">Manage Questions</a></li>
+	  </ul>
+	</li>
+        <li class="dropdown <?php echo (($page == "manage-document.php") ? "open" : "")?>">
+	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Document <b class="caret"></b></a>
+	  <ul class="dropdown-menu">
+	    <li class="<?php echo ($page == "manage-document.php" ? "active" : "")?>"><a href="manage-document.php">Manage Documents</a></li>
 	  </ul>
 	</li>
 
