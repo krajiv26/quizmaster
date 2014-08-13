@@ -555,12 +555,32 @@ ini_set("display_errors",1);
 		while ($row = mysqli_fetch_assoc($result)) {
 		  $answer_set[$id++] = $row; 
 		  $fontClass = ($row['is_correct'] == 1)?"correct":"";
-		  $ansHtml .= $id.'. <span class="'.$fontClass.'">'.html_entity_decode($row['answer_text']).'</span><br>';
+                  //if($question_id != 573 )
+		  //$ansHtml .= $id.'. <span class="'.$fontClass.'">'.html_entity_decode($row['answer_text']).'</span><br>';
+                  //else
+                  $ansHtml .= $id.'. <span class="'.$fontClass.'">'.checkAnsFormat($row['answer_text']).'</span><br>';
 		}
 		$ansHtml .= '</div>';	
 		return $ansHtml;
 	}
-	
+        
+	function checkAnsFormat($ansHtml)
+        {
+            $html = "";
+            //echo $ansHtml;
+           if(preg_match("/(.*?)\<pre>(.*?)\<\/pre\>/is", html_entity_decode($ansHtml), $matches) == 1)
+           {
+              $html .= $matches[1];
+              $html .= "<pre><code>";
+              $html .= htmlentities($matches[2]);
+              $html .= "</code></pre>";
+              $html .= substr(html_entity_decode($ansHtml),strrpos(html_entity_decode($ansHtml),'</pre>'));
+           }
+            else
+                $html .= html_entity_decode($ansHtml);
+            return $html;
+        }
+        
 	function get_correct_answers($question_data) {
 		global $db;
 		
