@@ -172,12 +172,10 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
              
            
         <h2>Question List (<?php echo $total;?>) </h2>
-        <?php echo $pagination_html;
-        
-        ?>
+        <?php echo $pagination_html;  ?>
 	<form name="table_select" id="table_select" action="assign-question.php" method="post">
             <div style="float:left;clear:both;">
-                <button type ="button"  id="show-answer" name="show-answer" value="show-answer" class="btn btn-primary pull-right tbp-flush-right">Show All Answer</button>
+                <button type ="button"  id="show-answer" name="show-answer" value="show-answer" class="btn btn-primary pull-right tbp-flush-right">Hide All Answer</button>
             </div>
             <?php if(checkUserType() == 'admin') { ?>
             <div class="col-sm-offset-10 col-sm-2" style="margin-bottom:10px;">
@@ -212,7 +210,7 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
                   <tr>
                     <?php if(checkUserType() == 'admin') { ?><td><input class="checkbox1" type="checkbox" name="check[]" value="<?php echo $row['question_id']; ?>"></td><?php } ?>
                     <td><?php echo $row['question_id']; ?></td>
-                    <td><a style ="cursor:pointer;" onclick="$('#ans_<?php echo $row['question_id'];?>').toggle();"><?php echo html_entity_decode($row['question_text']); ?></a></td>
+                    <td><a style ="cursor:pointer;" onclick="$('#ans_<?php echo $row['question_id'];?>').toggle();"><?php echo checkAnsFormat($row['question_text']); ?></a></td>
                     <td><?php echo $cat[$row['category']]; ?></td>
                     <td><?php echo $answered[$row['is_answered']]; ?></td>
                     <?php if(checkUserType() == 'admin') { ?><td>
@@ -222,7 +220,7 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
                         <a href="edit-question.php?question_id=<?php echo htmlentities($row['question_id']); ?>" ><i class="fa fa-edit fa-2x"></i></a>                
                     </td><?php } ?>
                   </tr >
-                    <tr id="ans_<?php echo $row['question_id'];?>" style="display:none;">
+                    <tr id="ans_<?php echo $row['question_id'];?>" >
                     <td colspan="6"><?php echo get_question_answers_html($row['question_id']);?></td>
                     </tr>
 
@@ -257,6 +255,7 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
               </tbody>
             </table>
           </form>
+        <?php echo $pagination_html;  ?>
           </div><!-- /.table-responsive -->
       </div>
     </div><!-- /.row -->
@@ -292,13 +291,13 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
     });
    
    $('#show-answer').click(function(event) {  //on click
-      if($(this).html() == "Show All Answer"){
-          $(this).html("Hide All Answer");
-          $( "tr[id^='ans_']" ).show();
-      }
-      else {
+      if($(this).html() == "Hide All Answer"){
           $(this).html("Show All Answer");
           $( "tr[id^='ans_']" ).hide();
+      }
+      else {
+          $(this).html("Hide All Answer");
+          $( "tr[id^='ans_']" ).show();
       }
       
     });
