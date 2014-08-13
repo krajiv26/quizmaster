@@ -74,8 +74,10 @@ $docs_list = get_all_docs($where);
                   <th>File Type<i class="fa fa-sort"></i></th>
                   <th>Category<i class="fa fa-sort"></i></th>
                   <th>View</th>
+                  <?php if(checkUserType() == 'admin') { ?>
                   <th>Edit</th>
                   <th>Delete</th>
+                  <?php } ?>
                 </tr>
               </thead>
               <tbody id="user-rows">     
@@ -94,12 +96,14 @@ $docs_list = get_all_docs($where);
                     <td>
                         <a href="view-document.php?doc_id=<?php echo htmlentities($row['doc_id']); ?>" target="_blank" ><i class="fa fa-pencil fa-2x"></i> View</a>                
                     </td>
+                   <?php if(checkUserType() == 'admin') { ?>
                     <td>
                         <a href="edit-document.php?doc_id=<?php echo htmlentities($row['doc_id']); ?>" ><i class="fa fa-edit fa-2x"></i> Edit</a>                
                     </td>
                     <td>
                         <a data-toggle="modal" data-target="#confirm-delete-modal<?php echo htmlentities($row['doc_id']); ?>"><i class="fa fa-trash-o fa-2x"></i> Delete</a>
                     </td>
+                    <?php } ?>
                   </tr>
 
                 

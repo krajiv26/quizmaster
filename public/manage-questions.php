@@ -12,7 +12,7 @@ $_SESSION["get_query"] = $_SERVER["QUERY_STRING"];
 /*.correct{color:#008000;}*/
 .correct{color:#ff00ff;font-weight:bold;}
 .your-ans{border:1px solid; padding-right:20px;}
-
+a:hover{text-decoration: none !important;}
 </style>
 <!-- Query database for all users -->
 <?php 
@@ -154,6 +154,7 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
                     </span>
                   </div>
               </div>
+             
               <div class="col-lg-3">
                   <label class="control-label">&nbsp;</label>
                   <div class="input-group" style="margin-left:50%;">
@@ -175,7 +176,10 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
         
         ?>
 	<form name="table_select" id="table_select" action="assign-question.php" method="post">
-           <?php if(checkUserType() == 'admin') { ?>
+            <div style="float:left;clear:both;">
+                <button type ="button"  id="show-answer" name="show-answer" value="show-answer" class="btn btn-primary pull-right tbp-flush-right">Show All Answer</button>
+            </div>
+            <?php if(checkUserType() == 'admin') { ?>
             <div class="col-sm-offset-10 col-sm-2" style="margin-bottom:10px;">
              <label for="submit-assign-question"></label>
                 <button type ="submit"  id="assign-question" name="assign-question" value="assign-question" class="btn btn-primary pull-right tbp-flush-right">Assign Question</button>
@@ -208,7 +212,7 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
                   <tr>
                     <?php if(checkUserType() == 'admin') { ?><td><input class="checkbox1" type="checkbox" name="check[]" value="<?php echo $row['question_id']; ?>"></td><?php } ?>
                     <td><?php echo $row['question_id']; ?></td>
-                    <td><a onclick="$('#ans_<?php echo $row['question_id'];?>').toggle();"><?php echo $row['question_text']; ?></a></td>
+                    <td><a style ="cursor:pointer;" onclick="$('#ans_<?php echo $row['question_id'];?>').toggle();"><?php echo html_entity_decode($row['question_text']); ?></a></td>
                     <td><?php echo $cat[$row['category']]; ?></td>
                     <td><?php echo $answered[$row['is_answered']]; ?></td>
                     <?php if(checkUserType() == 'admin') { ?><td>
@@ -287,6 +291,17 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
         return false;
     });
    
+   $('#show-answer').click(function(event) {  //on click
+      if($(this).html() == "Show All Answer"){
+          $(this).html("Hide All Answer");
+          $( "tr[id^='ans_']" ).show();
+      }
+      else {
+          $(this).html("Show All Answer");
+          $( "tr[id^='ans_']" ).hide();
+      }
+      
+    });
 });
   </script>
 <?php require_once("../includes/db-connection-close.php"); ?>

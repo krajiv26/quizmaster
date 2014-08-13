@@ -89,14 +89,14 @@ $cat = get_all_category();
                         <textarea class="form-control" rows="1" id="answer4" name="answer4" value="<?php echo isset($form_values['answer_text']) ? $form_values['answer_text'] : '' ?>"placeholder="Ex. Red or Green" class="input-xlarge"></textarea>
                         </div>
                       </div>
-					  <div style="float:left;">
-						<div class="form-group">
+		<div style="float:left;">
+			<div class="form-group">
                         <div class="col-sm-12">
-                        <input type="checkbox" value="1" name="multi_answer">
-						<label for="category control-label">Multi Answer</label>
+                            <input type="checkbox" value="1" name="multi_answer" id="multi_answer">
+                            <label for="category control-label">Multi Answer</label>
                         </div>
-						</div>
-						<div class="form-group">
+			</div>
+			<div class="form-group">
                         <div class="col-sm-12">
                         <label for="category control-label">Category</label>
                         <select name="category">
@@ -106,23 +106,23 @@ $cat = get_all_category();
 						}?>
 						</select>
                         </div>
-						</div>
-					  </div>
-					  <div style="float:right;">
-						<div class="form-group">
+			</div>
+		</div>
+		<div style="float:right;">
+			<div class="form-group">
                         <div class="col-sm-12">
                         <label for="category control-label">Answer</label>
-                        <select name="ischecked">
-						<option value="">None</option>
-						<option value="1">1 One</option>
-						<option value="2">2 Two</option>
-						<option value="3">3 Three</option>
-						<option value="4">4 Four</option>
-						</select>
+                        <select name="ischecked[]" id="ischecked">
+                            <option value="">None</option>
+                            <option value="1">1 One</option>
+                            <option value="2">2 Two</option>
+                            <option value="3">3 Three</option>
+                            <option value="4">4 Four</option>
+                        </select>
                         </div>
-						</div>
-					  </div>
-					  <div class="form-group">
+			</div>
+		</div>
+		<div class="form-group">
                         <div class="col-sm-12">
                         <label for="answer4 control-label">Explanation</label>
                         <textarea class="form-control" rows="1" id="explanation" name="explanation" value="<?php echo isset($form_values['explanation']) ? $form_values['explanation'] : '' ?>"placeholder="" class="input-xlarge"></textarea>
@@ -131,7 +131,7 @@ $cat = get_all_category();
                       <!-- Button -->
                       <div class="col-sm-offset-10 col-sm-2">
                         <label for="submit-new-mc-question"></label>
-                          <button type ="submit" id="submit-new-mc-question" name="submit-new-mc-question" value="submit-new-mc-question" class="btn btn-primary pull-right tbp-flush-right">Create New Question</button>
+                          <button type ="submit" id="submit-new-mc-question" name="submit-new-mc-question" value="submit-new-mc-question" onclick="return validateForm();" class="btn btn-primary pull-right tbp-flush-right">Create New Question</button>
                       </div>
 
                     </form>
@@ -166,7 +166,7 @@ $cat = get_all_category();
                       <!-- Button -->
                       <div class="col-sm-offset-10 col-sm-2">
                         <label for="submit-new-user"></label>
-                        <button type ="submit" id="submit-new-question" name="submit-new-question" value="submit-new-question" class="btn btn-primary pull-right tbp-flush-right">Create New Question</button>
+                        <button type ="submit" id="submit-new-question" name="submit-new-question" value="submit-new-question"  class="btn btn-primary pull-right tbp-flush-right">Create New Question</button>
                       </div>
 
                     </form>
@@ -178,10 +178,43 @@ $cat = get_all_category();
       </div>
   </div><!-- /#page-wrapper -->
 
-<script>
+
+<?php include('../includes/layouts/footer.php'); ?>
+  <script>
   function resetNewUserForm() {
     location.reload();
   }
+  function validateForm(){
+      var cnt = 0;
+      if($('#multi_answer:checked').val() == 1){
+        
+        $('#ischecked > :selected').each(function() {
+            if($(this).val() != "")
+                cnt = cnt + 1;
+        });
+        if(cnt < 2){
+         alert("You are selecting only 1 or none answer for MuitiSeclect Anwser");
+         return false;   
+        }
+      }
+  }
+$(document).ready(function() {
+  $('#multi_answer').change(function(event) {  //on click
+    if(this.checked == true)
+    {
+        $('#ischecked').attr({
+        'multiple': true,
+        'size' : 5
+        });
+    }
+    else
+    {
+        $('#ischecked').attr({
+        'multiple': false,
+        'size' : 0
+        });
+    }
+    });
+ });
 </script>
-<?php include('../includes/layouts/footer.php'); ?>
 <?php require_once("../includes/db-connection-close.php"); ?>

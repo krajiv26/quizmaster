@@ -11,7 +11,7 @@
 <?php
   if(isset($_POST['submit-import-mc-question'])) {
 
-		if (isset($_FILES["file"])) {
+     if (isset($_FILES["file"])) {
 
             //if there was an error uploading the file
         if ($_FILES["file"]["error"] > 0) {
@@ -24,55 +24,55 @@
              echo "Type: " . $_FILES["file"]["type"] . "<br />";
              echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
              echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";*/
-			if( $_FILES["file"]["type"] != 'text/csv'){
-				$_SESSION["error_message"] = " Please upload only csv file. This is not valid file type ";
-			}
-			else {
-			
+            if( $_FILES["file"]["type"] != 'text/csv'){
+                    $_SESSION["error_message"] = " Please upload only csv file. This is not valid file type ";
+            }
+            else {
 
-			$upload_dir = $_SERVER['DOCUMENT_ROOT'] . "/quizmaster/upload/";
-			
-			if (file_exists($upload_dir) && is_writable($upload_dir)) {
-				// do upload logic here
-				   //if file already exists
-				 if (file_exists($upload_dir . $_FILES["file"]["name"])) {
-					$_SESSION["error_message"] = $_FILES["file"]["name"] . " already exists. ";
-				 }
-				 else {
-						//Store file in directory "upload" with the name of "uploaded_file.txt"
-					$storagename = basename($_FILES["file"]["name"])."_".time().".csv";
-					if(move_uploaded_file($_FILES["file"]["tmp_name"], $upload_dir . $storagename)){
-						$_SESSION["message"] =  "Stored in: " . "upload/" . $_FILES["file"]["name"];
-						$f = fopen($upload_dir.$storagename,"r");
-						$cnt = 0;
-						while(! feof($f))
-						  {
-							$cnt++;
-							if($cnt == 1) {
-							$header = fgetcsv($f);
-							}
-							else
-							{
-								$data = array();
-								foreach(fgetcsv($f) as $k=>$v)
-								{
-									$data[$header[$k]] = $v;
-								}
-								// Go for db insertion:
-								if(trim($data['question']) != "")
-									import_one_question($data);
-							}
-						  }
-						fclose($f);
-					}
-					
-				}
-				
-			}
-			else {
-				$_SESSION["error_message"] = 'Upload directory is not writable, or does not exist.';
-			}	 
-			}	 
+
+                $upload_dir = $_SERVER['DOCUMENT_ROOT'] . "/quizmaster/upload/";
+
+                if (file_exists($upload_dir) && is_writable($upload_dir)) {
+                        // do upload logic here
+                           //if file already exists
+                    if (file_exists($upload_dir . $_FILES["file"]["name"])) {
+                           $_SESSION["error_message"] = $_FILES["file"]["name"] . " already exists. ";
+                    }
+                    else {
+                                   //Store file in directory "upload" with the name of "uploaded_file.txt"
+                           $storagename = basename($_FILES["file"]["name"])."_".time().".csv";
+                           if(move_uploaded_file($_FILES["file"]["tmp_name"], $upload_dir . $storagename)){
+                                   $_SESSION["message"] =  "Stored in: " . "upload/" . $_FILES["file"]["name"];
+                                   $f = fopen($upload_dir.$storagename,"r");
+                                   $cnt = 0;
+                                   while(! feof($f))
+                                     {
+                                           $cnt++;
+                                           if($cnt == 1) {
+                                           $header = fgetcsv($f);
+                                           }
+                                           else
+                                           {
+                                            $data = array();
+                                            foreach(fgetcsv($f) as $k=>$v)
+                                            {
+                                                    $data[$header[$k]] = $v;
+                                            }
+                                            // Go for db insertion:
+                                            if(trim($data['question']) != "")
+                                                    import_one_question($data);
+                                           }
+                                     }
+                                   fclose($f);
+                           }
+
+                   }
+
+                }
+                else {
+                        $_SESSION["error_message"] = 'Upload directory is not writable, or does not exist.';
+                }	 
+               }	 
 				 
               
         }

@@ -11,7 +11,6 @@
   if(isset($_POST['submit-new-mc-question'])) {
 
     // The New Multiple Choice Form was submitted
-    
 
     // Validate New User Form inputs
     $fields_required = array("question_text", "answer1", "answer2",
@@ -41,6 +40,8 @@
     }
 
     // If inputs were valid begin insertion.
+    $isCheckedPost = $_POST['ischecked'];
+    unset($_POST['ischecked']);
     $_POST = array_map('addslashes',$_POST);
     $_POST = array_map('htmlentities',$_POST);
 
@@ -51,121 +52,121 @@
     $answer4          = $_POST['answer4'];
     $category         = $_POST['category'];
     $explanation      = $_POST['explanation'];
-	$multi_answer = (isset($_POST['multi_answer']) && $_POST['multi_answer'] == 1)? 1 : 0;
-	$is_answered = (isset($_POST['ischecked']))? 1 : 0;
-	$created_at = date("Y-m-d H:i:s");
-    // Insert new question into question table
-    $query  = "INSERT INTO question (";
-    $query .= "  question_text, category, explanation, multi_answer, is_answered, created_at ";
-    $query .= ") VALUES (";
-    $query .= "  '{$question_text}', ";
-    $query .= "  {$category}, '{$explanation}', {$multi_answer}, {$is_answered}, '{$created_at}'";
-    $query .= ")";
-//echo $query; exit;
-    $result = mysqli_query($db, $query);
-
-    if ( false === $result ) {
-      // Query failed. Print out information.
-      printf("error: %s\n", mysqli_error($db));
-      $_SESSION["error_message"] = "Database insertion failure";
-      redirect_to("new-question.php");
-
-    } 
-
-    $inserted_question_id = mysqli_insert_id($db);
-
-    // Insert new question's answers into answer table
-    $ischecked = false;
-      
-    // Answer 1
-    if($_POST['ischecked'] == '1') { $ischecked = true; }
-
-    $query1  = "INSERT INTO answer (";
-    $query1 .= "  answer_text, question_id, is_correct";
-    $query1 .= ") VALUES (";
-    $query1 .= "  '{$answer1}', '{$inserted_question_id}', '{$ischecked}'";
-    $query1 .= ")";
-
-    $result1 = mysqli_query($db, $query1);
-
-    if ( false === $result1 ) {
-      // Query failed. Print out information.
-      printf("error: %s\n", mysqli_error($db));
-      $_SESSION["error_message"] = "Database insertion failure";
-      redirect_to("new-question.php");
+    $created_at = date("Y-m-d H:i:s");
+    $multi_answer = (isset($_POST['multi_answer']) && $_POST['multi_answer'] == 1)? 1 : 0;
+    if($multi_answer == 0){
+        $is_answered = (isset($isCheckedPost[0]) && $isCheckedPost[0] != "")? 1 : 0;
     }
+    else
+    {  //multi answer
+        $is_answered = 1;
+     }
+        // Insert new question into question table
+        $query  = "INSERT INTO question (";
+        $query .= "  question_text, category, explanation, multi_answer, is_answered, created_at ";
+        $query .= ") VALUES (";
+        $query .= "  '{$question_text}', ";
+        $query .= "  {$category}, '{$explanation}', {$multi_answer}, {$is_answered}, '{$created_at}'";
+        $query .= ")";
+    //echo $query; exit;
+        $result = mysqli_query($db, $query);
 
-    $ischecked = false; 
+        if ( false === $result ) {
+          // Query failed. Print out information.
+          printf("error: %s\n", mysqli_error($db));
+          $_SESSION["error_message"] = "Database insertion failure";
+          redirect_to("new-question.php");
 
-    // Answer 2
-    if($_POST['ischecked'] == '2') { $ischecked = true; }
+        } 
 
-    $query2  = "INSERT INTO answer (";
-    $query2 .= "  answer_text, question_id, is_correct";
-    $query2 .= ") VALUES (";
-    $query2 .= "  '{$answer2}', '{$inserted_question_id}', '{$ischecked}'";
-    $query2 .= ")";
+        $inserted_question_id = mysqli_insert_id($db);
+        
+        $ischecked = false;
 
-    $result2 = mysqli_query($db, $query2);
+        // Answer 1
+        if(in_array(1,$isCheckedPost)) { $ischecked = true; }
 
-    if ( false === $result2 ) {
-      // Query failed. Print out information.
-      printf("error: %s\n", mysqli_error($db));
-      $_SESSION["error_message"] = "Database insertion failure";
-      redirect_to("new-question.php");
-    }
+        $query1  = "INSERT INTO answer (";
+        $query1 .= "  answer_text, question_id, is_correct";
+        $query1 .= ") VALUES (";
+        $query1 .= "  '{$answer1}', '{$inserted_question_id}', '{$ischecked}'";
+        $query1 .= ")";
 
-    $ischecked = false;
+        $result1 = mysqli_query($db, $query1);
 
-    // Answer 3
-    if($_POST['ischecked'] == '3') { $ischecked = true; }
+        if ( false === $result1 ) {
+          // Query failed. Print out information.
+          printf("error: %s\n", mysqli_error($db));
+          $_SESSION["error_message"] = "Database insertion failure";
+          redirect_to("new-question.php");
+        }
 
-    $query3  = "INSERT INTO answer (";
-    $query3 .= "  answer_text, question_id, is_correct";
-    $query3 .= ") VALUES (";
-    $query3 .= "  '{$answer3}', '{$inserted_question_id}', '{$ischecked}'";
-    $query3 .= ")";
+        $ischecked = false; 
 
-    $result3 = mysqli_query($db, $query3);
+        // Answer 2
+        if(in_array(2,$isCheckedPost)) { $ischecked = true; }
 
-    if ( false === $result3 ) {
-      // Query failed. Print out information.
-      printf("error: %s\n", mysqli_error($db));
-      $_SESSION["error_message"] = "Database insertion failure";
-      redirect_to("new-question.php");
-    }
+        $query2  = "INSERT INTO answer (";
+        $query2 .= "  answer_text, question_id, is_correct";
+        $query2 .= ") VALUES (";
+        $query2 .= "  '{$answer2}', '{$inserted_question_id}', '{$ischecked}'";
+        $query2 .= ")";
 
-    $ischecked = false;
+        $result2 = mysqli_query($db, $query2);
 
-    // Answer 4
-    if($_POST['ischecked'] == '4') { $ischecked = true; }
+        if ( false === $result2 ) {
+          // Query failed. Print out information.
+          printf("error: %s\n", mysqli_error($db));
+          $_SESSION["error_message"] = "Database insertion failure";
+          redirect_to("new-question.php");
+        }
 
-    $query4  = "INSERT INTO answer (";
-    $query4 .= "  answer_text, question_id, is_correct";
-    $query4 .= ") VALUES (";
-    $query4 .= "  '{$answer4}', '{$inserted_question_id}', '{$ischecked}'";
-    $query4 .= ")";
+        $ischecked = false;
 
-    $result4 = mysqli_query($db, $query4);
+        // Answer 3
+        if(in_array(3,$isCheckedPost)) { $ischecked = true; }
 
-    if ( false === $result4 ) {
-      // Query failed. Print out information.
-      printf("error: %s\n", mysqli_error($db));
-      $_SESSION["error_message"] = "Database insertion failure";
-      redirect_to("new-question.php");
-    }  
+        $query3  = "INSERT INTO answer (";
+        $query3 .= "  answer_text, question_id, is_correct";
+        $query3 .= ") VALUES (";
+        $query3 .= "  '{$answer3}', '{$inserted_question_id}', '{$ischecked}'";
+        $query3 .= ")";
+
+        $result3 = mysqli_query($db, $query3);
+
+        if ( false === $result3 ) {
+          // Query failed. Print out information.
+          printf("error: %s\n", mysqli_error($db));
+          $_SESSION["error_message"] = "Database insertion failure";
+          redirect_to("new-question.php");
+        }
+
+        $ischecked = false;
+
+        // Answer 4
+        if(in_array(4,$isCheckedPost)) { $ischecked = true; }
+
+        $query4  = "INSERT INTO answer (";
+        $query4 .= "  answer_text, question_id, is_correct";
+        $query4 .= ") VALUES (";
+        $query4 .= "  '{$answer4}', '{$inserted_question_id}', '{$ischecked}'";
+        $query4 .= ")";
+
+        $result4 = mysqli_query($db, $query4);
+
+        if ( false === $result4 ) {
+          // Query failed. Print out information.
+          printf("error: %s\n", mysqli_error($db));
+          $_SESSION["error_message"] = "Database insertion failure";
+          redirect_to("new-question.php");
+        }  
 
 
 
-    // Success
-    $_SESSION["message"] = "Successfully created new multiple choice question!";
-    redirect_to("manage-questions.php");
-    
-
-
-
-
-
+        // Success
+        $_SESSION["message"] = "Successfully created new multiple choice question!";
+        redirect_to("manage-questions.php");
+        
   } else {
     // This is probably a get request
     $_SESSION["message"] = "Please fill in the form to create a new question.";

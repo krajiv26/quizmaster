@@ -58,7 +58,8 @@ $cat = get_all_category();
 
       redirect_to($redirect_url);
     }
-
+    $isCheckedPost = $_POST['ischecked'];
+    unset($_POST['ischecked']);
     // If inputs were valid begin update.
     $_POST = array_map('addslashes',$_POST);
     $_POST = array_map('htmlentities',$_POST);
@@ -70,10 +71,14 @@ $cat = get_all_category();
     $answer4          = $_POST['answer4'];
     $category         = $_POST['category'];
     $explanation      = $_POST['explanation'];
-	$multi_answer = (isset($_POST['multi_answer']) && $_POST['multi_answer'] == 1)? 1 : 0;
-	$is_answered = (isset($_POST['ischecked']) && $_POST['ischecked'] > 0)? 1 : 0;
-    
-
+    $multi_answer = (isset($_POST['multi_answer']) && $_POST['multi_answer'] == 1)? 1 : 0;
+    if($multi_answer == 0){
+        $is_answered = (isset($isCheckedPost[0]) && $isCheckedPost[0] != "")? 1 : 0;
+    }
+    else
+    {  //multi answer
+        $is_answered = 1;
+     }
     // Update Multiple Choice Question
     $query  = "UPDATE question SET ";
     $query .= "question_text = '{$question_text}', ";
@@ -99,7 +104,7 @@ $cat = get_all_category();
     $ischecked = false;
       
     // Answer 1
-    if($_POST['ischecked'] == '1') { $ischecked = true; }
+    if(in_array(1,$isCheckedPost)) { $ischecked = true; }
 
     $query1  = "UPDATE answer SET ";
     $query1 .= "answer_text = '{$answer1}', ";
@@ -120,7 +125,7 @@ $cat = get_all_category();
     $ischecked = false; 
 
     // Answer 2
-    if($_POST['ischecked'] == '2') { $ischecked = true; }
+    if(in_array(2,$isCheckedPost)) { $ischecked = true; }
 
     $query2  = "UPDATE answer SET ";
     $query2 .= "answer_text = '{$answer2}', ";
@@ -141,7 +146,7 @@ $cat = get_all_category();
     $ischecked = false;
 
     // Answer 3
-    if($_POST['ischecked'] == '3') { $ischecked = true; }
+    if(in_array(3,$isCheckedPost)) { $ischecked = true; }
 
     $query3  = "UPDATE answer SET ";
     $query3 .= "answer_text = '{$answer3}', ";
@@ -162,7 +167,7 @@ $cat = get_all_category();
     $ischecked = false;
 
     // Answer 4
-    if($_POST['ischecked'] == '4') { $ischecked = true; }
+    if(in_array(4,$isCheckedPost)) { $ischecked = true; }
 
     $query4  = "UPDATE answer SET ";
     $query4 .= "answer_text = '{$answer4}', ";
@@ -270,7 +275,7 @@ $cat = get_all_category();
                       <div style="float:left;">
 						<div class="form-group">
                         <div class="col-sm-12">
-                        <input type="checkbox" value="1" name="multi_answer" <?php echo ($question["multi_answer"] == 1) ? 'checked' : ''; ?>>
+                        <input type="checkbox" value="1" id="multi_answer" name="multi_answer" <?php echo ($question["multi_answer"] == 1) ? 'checked' : ''; ?>>
 						<label for="category control-label">Multi Answer</label>
                         </div>
 						</div>
@@ -291,13 +296,13 @@ $cat = get_all_category();
 						<div class="form-group">
                         <div class="col-sm-12">
                         <label for="category control-label">Answer</label>
-                        <select name="ischecked">
-						<option value="">None</option>
-						<option value="1" <?php echo ($answer_set[0]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>1 One</option>
-						<option value="2" <?php echo ($answer_set[1]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>2 Two</option>
-						<option value="3" <?php echo ($answer_set[2]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>3 Three</option>
-						<option value="4" <?php echo ($answer_set[3]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>4 Four</option>
-						</select>
+                        <select name="ischecked[]" id="ischecked" multiple="true" size =5>
+                            <option value="">None</option>
+                            <option value="1" <?php echo ($answer_set[0]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>1 One</option>
+                            <option value="2" <?php echo ($answer_set[1]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>2 Two</option>
+                            <option value="3" <?php echo ($answer_set[2]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>3 Three</option>
+                            <option value="4" <?php echo ($answer_set[3]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>4 Four</option>
+                        </select>
                         </div>
 						</div>
 					  </div>
@@ -310,7 +315,7 @@ $cat = get_all_category();
 
                       <div class="form-group pull-right">
                         <label for="submit-edit-mc-question"></label>
-                          <button type ="submit" id="submit-edit-mc-question" name="submit-edit-mc-question" value="submit-edit-mc-question" class="btn btn-primary">Update Question</button>
+                          <button type ="submit" id="submit-edit-mc-question" name="submit-edit-mc-question" value="submit-edit-mc-question" onclick="return validateForm();" class="btn btn-primary">Update Question</button>
                           <a href="manage-questions.php" id="cancel-edit-question" name="cancel-edit-question" class="btn btn-default">Cancel</a>
                           <!-- Button trigger modal -->
                           <!--<a class="btn btn-danger" data-toggle="modal" data-target="#confirm-delete-modal">Delete Question</a> -->
@@ -376,11 +381,44 @@ $cat = get_all_category();
 
 <?php include('../includes/layouts/footer.php'); ?>
 <script type='text/javascript'>
-	 $( document ).ready(function() {
-		// $('#explanation').wysihtml5();
-		 //alert($('#explanation').val());
-//$('#explanation').wysiwyg();
-});
-
+  function validateForm(){
+      var cnt = 0;
+      if($('#multi_answer:checked').val() == 1){
+        
+        $('#ischecked > :selected').each(function() {
+            if($(this).val() != "")
+                cnt = cnt + 1;
+        });
+        if(cnt < 2){
+         alert("You are selecting only 1 or none answer for MuitiSeclect Anwser");
+         return false;   
+        }
+      }
+  }    
+$(document).ready(function() {
+  if($('#multi_answer:checked').val() != 1){
+      $('#ischecked').attr({
+        'multiple': false,
+        'size' : 0
+        });
+  }
+  
+  $('#multi_answer').change(function(event) {  //on click
+    if(this.checked == true)
+    {
+        $('#ischecked').attr({
+        'multiple': true,
+        'size' : 5
+        });
+    }
+    else
+    {
+        $('#ischecked').attr({
+        'multiple': false,
+        'size' : 0
+        });
+    }
+    });
+ });
 </script>
 <?php require_once("../includes/db-connection-close.php"); ?>

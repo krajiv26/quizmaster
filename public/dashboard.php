@@ -1,4 +1,5 @@
 <?php require_once("../includes/sessions.php"); ?>
+<?php require_once("../includes/functions.php"); ?>
 <?php include('../includes/layouts/header.php'); ?>
 <?php $page = "dashboard.php"; ?>
 
@@ -26,8 +27,11 @@
         <ol class="breadcrumb">
           <li class="active"><a href="dashboard.php"><i class="icon-dashboard"></i> Dashboard</a></li>
         </ol>
-		<?php echo user_form_success_msg(); ?>
-		<div class="clearfix"></div>
+        <?php echo user_form_success_msg(); ?>
+        <?php echo delete_failure_msg(); ?>
+        <?php echo user_form_info_msg(); ?>
+        <?php echo user_form_failure_msg(); ?>
+	<div class="clearfix"></div>
       </div>
     </div><!-- /.row -->
   </div><!-- /#page-wrapper -->
