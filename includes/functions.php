@@ -125,11 +125,14 @@ ini_set("display_errors",1);
 		global $db;
 		$query 	= "SELECT * ";
 		$query .= "FROM question ";
-		$query .= "WHERE question_text = {$question} ";
+		$query .= "WHERE question_text like '%{$question}%' ";
 		$query .= "LIMIT 1";
 		$result = mysqli_query($db, $query);
-		if($result && $result->num_rows == 1) 
-			return true;  //means question is going to duplicate
+		if($result && $result->num_rows == 1)
+                {
+                    $_SESSION["error_message"] .= "\nDuplicate question '".$question."'";
+                    return true;  //means question is going to duplicate
+                }	
 		else
 			return false;
 	}
@@ -141,7 +144,9 @@ ini_set("display_errors",1);
 		$data = array_map('htmlentities',$data);
 		
 		if(is_question_exists($data['question'])) return false;
-		
+		echo "Hello";
+                return;
+                exit;
 		$question_text    = $data['question'];
 		$answer1          = $data['option_1'];
 		$answer2          = $data['option_2'];
