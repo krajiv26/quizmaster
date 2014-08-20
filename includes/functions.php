@@ -144,9 +144,6 @@ ini_set("display_errors",1);
 		$data = array_map('htmlentities',$data);
 		
 		if(is_question_exists($data['question'])) return false;
-		echo "Hello";
-                return;
-                exit;
 		$question_text    = $data['question'];
 		$answer1          = $data['option_1'];
 		$answer2          = $data['option_2'];
@@ -291,6 +288,18 @@ ini_set("display_errors",1);
 
 	  	return $result;
 	}
+        
+        function get_all_classified($where = "") {
+		global $db;
+                $where = ($where == "")?' 1 = 1':$where;
+	  	$query  = "SELECT * ";
+	  	$query .= "FROM classified_info WHERE {$where}";
+
+	  	$result = mysqli_query($db, $query);
+	  	confirm_query($result);
+
+	  	return $result;
+	}
         function get_all_docs($where = "") {
 		global $db;
 	  	$query  = "SELECT * ";
@@ -354,6 +363,25 @@ ini_set("display_errors",1);
 		}
 	}
         
+        function get_classified_by_id($info_id) {
+		global $db;
+
+		// Sanitize input parameter prior to making query
+		$safe_info_id = mysqli_real_escape_string($db, $info_id);
+
+		$query 	= "SELECT * ";
+		$query .= "FROM classified_info ";
+		$query .= "WHERE info_id = {$safe_info_id} ";
+		$query .= "LIMIT 1";
+               
+		$user_set = mysqli_query($db, $query);
+		confirm_query($user_set);
+		if($user = mysqli_fetch_assoc($user_set)) {
+			return $user;
+		} else {
+			return null;
+		}
+	}
         function get_doc_by_id($doc_id) {
             
 		global $db;

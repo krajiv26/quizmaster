@@ -44,6 +44,14 @@
 	    <li class="<?php echo ($page == "new-document.php" ? "active" : "")?>"><a href="new-document.php">New Document</a></li>
 	  </ul>
 	</li>
+        
+        <li class="dropdown <?php echo (($page == "manage-classified-info.php" || $page == "edit-classified-info.php" || $page == "new-classified-info.php" || $page == "view-info.php") ? "open" : "")?>">
+	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Classified <b class="caret"></b></a>
+	  <ul class="dropdown-menu">
+	    <li class="<?php echo ($page == "manage-classified-info.php" ? "active" : "")?>"><a href="manage-classified-info.php">Manage Classified Info</a></li>
+	    <li class="<?php echo ($page == "new-classified-info.php" ? "active" : "")?>"><a href="new-classified-info.php">New Classified Info</a></li>
+	  </ul>
+	</li>
 </ul>
 <?php } else if($_SESSION['user']['user_type'] == 'teacher'){ ?>
 <ul class="nav navbar-nav side-nav">
@@ -66,6 +74,12 @@
 	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Document <b class="caret"></b></a>
 	  <ul class="dropdown-menu">
 	    <li class="<?php echo ($page == "manage-document.php" ? "active" : "")?>"><a href="manage-document.php">Manage Documents</a></li>
+	  </ul>
+	</li>
+        <li class="dropdown <?php echo (($page == "manage-classified-info.php" ||  $page == "view-info.php") ? "open" : "")?>">
+	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Classified <b class="caret"></b></a>
+	  <ul class="dropdown-menu">
+	    <li class="<?php echo ($page == "manage-classified-info.php" ? "active" : "")?>"><a href="manage-classified-info.php">Manage Classified Info</a></li>
 	  </ul>
 	</li>
 
