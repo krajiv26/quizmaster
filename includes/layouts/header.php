@@ -6,7 +6,7 @@ if(!(isset($_SESSION["authenticate"]) && $_SESSION["authenticate"] == "Yes" && i
 	$_SESSION["error_message"] = "Please fill in the form to login.";
 	header("Location: index.php");
 }
-$teacherPage = array('dashboard.php','take-quizzes.php','quiz.php','manage-questions.php','manage-document.php','manage-classified-info.php','view-info.php','view-document.php');
+$teacherPage = array('dashboard.php','take-quizzes.php','quiz.php','manage-questions.php','manage-document.php','manage-classified-info.php','view-info.php','view-document.php','manage-essay-questions.php');
 $studentPage = array('dashboard.php','take-quizzes.php','quiz.php');
 
 $p = basename($_SERVER['SCRIPT_FILENAME']);
@@ -22,9 +22,6 @@ if($_SESSION["user"]["user_type"] == 'student'){
         header("Location: dashboard.php");
   }   
 }
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

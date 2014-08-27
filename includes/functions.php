@@ -484,6 +484,28 @@ ini_set("display_errors",1);
 	  	return $result;
 	}
 	
+        function get_all_essay_questions($where = ' 1 = 1') {
+		global $db;
+		$where = ($where == "")?' 1 = 1':$where;
+	  	$query  = "SELECT * ";
+	  	$query .= "FROM essay_question WHERE {$where}";
+	  	//echo $query; exit;
+	  	$result = mysqli_query($db, $query);
+	  	confirm_query($result);
+
+	  	return $result;
+	}
+	
+	function get_all_essay_questions_limit($start,$limit,$where = ' 1 = 1') {
+		global $db;
+		$where = ($where == "")?' 1 = 1':$where;
+	  	$query  = "SELECT * ";
+	  	$query .= "FROM essay_question WHERE {$where} LIMIT {$start} ,{$limit}";
+	  	$result = mysqli_query($db, $query);
+	  	confirm_query($result);
+
+	  	return $result;
+	}
 	
 	
 
@@ -496,6 +518,25 @@ ini_set("display_errors",1);
 		$query 	= "SELECT * ";
 		$query .= "FROM question ";
 		$query .= "WHERE question_id = {$safe_question_id} ";
+		$query .= "LIMIT 1";
+		$question_set = mysqli_query($db, $query);
+		confirm_query($question_set);
+		if($question = mysqli_fetch_assoc($question_set)) {
+			return $question;
+		} else {
+			return null;
+		}
+	}
+        
+        function get_essay_question_by_id($question_id) {
+		global $db;
+
+		// Sanitize input parameter prior to making query
+		$safe_question_id = mysqli_real_escape_string($db, $question_id);
+
+		$query 	= "SELECT * ";
+		$query .= "FROM essay_question ";
+		$query .= "WHERE eq_id = {$safe_question_id} ";
 		$query .= "LIMIT 1";
 		$question_set = mysqli_query($db, $query);
 		confirm_query($question_set);
