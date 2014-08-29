@@ -81,7 +81,9 @@ $users_list = get_all_classified($where);
                   <th>Title<i class="fa fa-sort"></i></th>
                   <th>Category</th>
                   <th>View</th>
+                  <?php if(checkUserType() == 'admin') { ?>
                   <th>Edit</th>
+                  <?php } ?>
                 </tr>
               </thead>
               <tbody id="user-rows">     
@@ -98,9 +100,11 @@ $users_list = get_all_classified($where);
                     <td><?php echo $cat[$row['category']]; ?></td>
                     <td><a href="view-info.php?info_id=<?php echo htmlentities($row['info_id']); ?>" ><i class="fa fa-pencil fa-2x"></i> View</a>                
                     </td>
+                    <?php if(checkUserType() == 'admin') { ?>
                     <td>
                         <a href="edit-classified-info.php?info_id=<?php echo htmlentities($row['info_id']); ?>" ><i class="fa fa-edit fa-2x"></i> Edit</a>                
                     </td>
+                    <?php } ?>
                   </tr>
               <?php
                 }

@@ -26,7 +26,6 @@ $cat = get_all_category();
 <?php
   
   // Temporary hack to simulate logged in user
-  $user_id = 1;
 
   if(isset($_POST['submit-edit-mc-question'])) {
 
@@ -282,7 +281,7 @@ $cat = get_all_category();
 						<div class="form-group">
                         <div class="col-sm-12">
                         <label for="category control-label">Category</label>
-                        <select name="category">
+                        <select name="category" class="form-control">
 						<?php foreach($cat as $k=>$v)
 						{
 							$sel = ($k == $question["category"])? 'selected="selected"':'';
@@ -296,7 +295,7 @@ $cat = get_all_category();
 						<div class="form-group">
                         <div class="col-sm-12">
                         <label for="category control-label">Answer</label>
-                        <select name="ischecked[]" id="ischecked" multiple="true" size =5>
+                        <select name="ischecked[]" id="ischecked" multiple="true" size =5 class="form-control">
                             <option value="">None</option>
                             <option value="1" <?php echo ($answer_set[0]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>1 One</option>
                             <option value="2" <?php echo ($answer_set[1]["is_correct"] == 1) ? 'selected="selected"' : ''; ?>>2 Two</option>
