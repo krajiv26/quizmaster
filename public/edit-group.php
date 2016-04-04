@@ -14,6 +14,9 @@
     <!-- Brand and toggle get grouped for better mobile display -->
     <?php include('../includes/layouts/admin-head.php'); ?>
 
+
+
+
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <?php include('../includes/layouts/admin-side-nav.php'); ?>
@@ -21,6 +24,9 @@
       <?php include('../includes/layouts/admin-profile.php'); ?>
     </div><!-- /.navbar-collapse -->
   </nav>
+  <?php
+  $groups = get_groups($_GET['user_id']);
+ ?>
   <div id="page-wrapper">
 
     <div class="row">
@@ -52,12 +58,12 @@
             <h3 class="panel-title"><strong>Group Name</strong></h3>
           </div>
           <div class="panel-body">
-             <form class="form-horizontal" role="form">
+             <form class="form-horizontal" role="form" action="process-group.php" method="post">
               <div class="form-group">
                 <label for="new-quiz-name-field" class="col-lg-2 control-label">Add Members to this Group</label>
                 <div class="col-lg-10">
-                  <textarea class="form-control" rows="10" id="add-group-members-textarea" name="add-group-members-textarea" value="<?php echo isset($form_values['question_text']) ? $form_values['question_text'] : '' ?>"
-                          placeholder='jdoe@bingmail.com;janedoe@example.com;demostudent39@someuniversity.edu' class="input-xlarge"></textarea>
+                  <textarea class="form-control" rows="10" id="add-group-members-textarea" name="add-group-members-textarea" value=""
+                          placeholder='jdoe@bingmail.com;janedoe@example.com;demostudent39@someuniversity.edu' class="input-xlarge"><?php echo isset($groups['grp_emails']) ? $groups['grp_emails'] : '' ?></textarea>
                           <p class="help-block">Assign individuals to this group by the email address they used to create their Test Builder Pro account.</p>
                           <p class="help-block">Separate each email address with a semi-colon.</p>
                 </div>
@@ -65,6 +71,7 @@
               <div class="form-group">
                 <div class="col-lg-12">
                   <div class="pull-right">
+                  <input type="hidden" name="grp_id" value="<?php echo $_GET['user_id']?>">
                     <button type ="submit" id="submit-edit-group" name="submit-edit-group" value="submit-edit-group" class="btn btn-primary">Update Group</button>
                     <a href="manage-groups.php" id="cancel-edit-group" name="cancel-edit-group" class="btn btn-default">Cancel</a>
                     <!-- Button trigger modal -->

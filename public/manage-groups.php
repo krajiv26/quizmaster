@@ -75,6 +75,7 @@
               <?php
                 while($row = mysqli_fetch_assoc($groups_list))
                 {
+                  //print_r($row); exit;
               ?>
 
                   <tr>
@@ -85,7 +86,7 @@
                         <a href="assign-group.php" ><i class="fa fa-user fa-2x"></i> Assign</a>                
                     </td>
                     <td>
-                        <a href="edit-group.php?user_id=<?php echo htmlentities($row['user_id']); ?>" ><i class="fa fa-edit fa-2x"></i> Edit</a>                
+                        <a href="edit-group.php?user_id=<?php echo htmlentities($row['grp_id']); ?>" ><i class="fa fa-edit fa-2x"></i> Edit</a>                
                     </td>
                     <td>
                         <!--<a data-toggle="modal" data-target="#confirm-delete-modal"><i class="fa fa-trash-o fa-2x"></i> Delete</a>-->
