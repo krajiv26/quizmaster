@@ -84,7 +84,7 @@
                     <td><?php if($row['deadline']) { echo $row['deadline']; } else { echo 'NO DEADLINE SET'; } ?></td>
                     <td><?php echo get_quiz_question_count($row['quiz_id']); ?></td>
                     <td>
-                        <a href="edit-user.php?quiz_id=<?php echo htmlentities($row['quiz_id']); ?>" ><i class="fa fa-bar-chart-o fa-2x"></i> Scores</a>                
+                        <a href="quiz-score.php?quiz_id=<?php echo htmlentities($row['quiz_id']); ?>" ><i class="fa fa-bar-chart-o fa-2x"></i> Scores</a>                
                     </td>
                     <td>
                         <a href="assign-quiz.php" ><i class="fa fa-user fa-2x"></i> Assign</a>                

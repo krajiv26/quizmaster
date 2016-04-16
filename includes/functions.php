@@ -275,8 +275,27 @@ ini_set("display_errors",1);
 
 	  	return $result;
 	}
+	
+	
 
+	function get_groups($id) {
+		global $db;
 
+		// Sanitize input parameter prior to making query
+		$safe_user_id = mysqli_real_escape_string($db, $id);
+
+		$query 	= "SELECT * ";
+		$query .= "FROM groups ";
+		$query .= "WHERE grp_id = {$id} ";
+		$query .= "LIMIT 1";
+		$user_set = mysqli_query($db, $query);
+		confirm_query($user_set);
+		if($user = mysqli_fetch_assoc($user_set)) {
+			return $user;
+		} else {
+			return null;
+		}
+	}
 	function get_all_users() {
 		global $db;
 
@@ -300,7 +319,21 @@ ini_set("display_errors",1);
 
 	  	return $result;
 	}
-        function get_all_docs($where = "") {
+        
+     function get_quiz_score_details($quiz_id) {
+		global $db;
+
+	  	$query  = "SELECT * ";
+	  	$query .= "FROM `quiz_score` where quiz_id = {$quiz_id}";
+
+	  	$result = mysqli_query($db, $query);
+	  	confirm_query($result);
+
+	  	return $result;
+	}   
+        
+        
+     function get_all_docs($where = "") {
 		global $db;
 	  	$query  = "SELECT * ";
                 $query .= "FROM document WHERE is_deleted = 0 {$where}";  
@@ -324,6 +357,8 @@ ini_set("display_errors",1);
 		}
 	  	return $cat;
 	}
+
+
 
 	function get_quiz_score($qs_id) {
 		global $db;
@@ -691,6 +726,38 @@ ini_set("display_errors",1);
 		  if($answer_data[$k] == $v) $score++;
 	  }
 	 return $score;
+  }
+  
+  function get_score_analysis($answer_sl,$quiz_id)
+  {
+	  
+	   $data = @unserialize($answer_sl);
+		//pr($data,1);
+		$question_data = array();
+		foreach($data as $k => $v)
+		{
+			$key = substr($k,9);
+			if(intval($key) == 0) continue;  //other than quesiton_* will be removed
+			$question_data[substr($k,9)] = $v;
+		}
+		$answer_data = get_correct_answers($question_data);
+		
+		  $all_q_id = get_quiz_questions_id($quiz_id);
+		  
+		  $final_result = array();
+		  foreach($all_q_id as $k => $v){
+			  $final_result[$k] = (@$answer_data[$k] == @$question_data[$k]) ? 1: 0;
+		  }
+		 return $final_result;
+  }
+  
+  function get_percentage_score($final_result){
+	  $score = 0;
+	  foreach($final_result as $k=>$v){
+		  $score += $v;
+	  }
+	 $percent = ($score*100)/count($final_result);
+	  return number_format($percent,2);
   }
   function checkUserType()
   {
