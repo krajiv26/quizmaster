@@ -20,6 +20,7 @@
   if(!$quiz) { redirect_to("manage-quizzes.php"); }
 ?>
  <?php $quiz_score = get_quiz_score_details($id);
+ $quiz_score1 = get_quiz_score_details($id);
  
 $quiz_q_count = get_quiz_question_count($id);
   ?>
@@ -76,6 +77,7 @@ th, td{	text-align:center;}
    <div class="col-lg-12">
 
       <div>
+		  <h2>Score Analysis</h2>
       <table  >
 	  <tr><th  rowspan="2" style="width:100px;">Name</th><th  rowspan="2" style="width:100px;">Total<br>Score (%)</th><th colspan="<?php echo $quiz_q_count;?>">Question</th></tr>
 	  <tr>
@@ -85,9 +87,16 @@ th, td{	text-align:center;}
 		?>
 	  
 	  </tr>
-	  <?php while($row = mysqli_fetch_assoc($quiz_score)) { 
-		   
+	  <?php 
+	  $questionwise_array = array();
+	  $userCnt = 0;
+	  while($row = mysqli_fetch_assoc($quiz_score)) { 
+		   $userCnt++;
 		  $sc_analysis = get_score_analysis($row['answer_sl'],$row['quiz_id']);
+		  foreach($sc_analysis as $key => $val){
+		  $questionwise_array[$key][] = $val;
+			}
+			
 		  $percent = get_percentage_score($sc_analysis);
 		  ?>
 		<tr><td><?php echo $row['user_id']; ?></td><td><?php echo $percent; ?></td>
@@ -104,8 +113,24 @@ th, td{	text-align:center;}
       </table>
       
       </div>
-        
-       
+      <!--- -->  
+       <div class="col-lg-12">
+
+      <div>
+		  <h2>Difficulty Index and the Discrimination Index</h2>
+      <table  >
+	  <tr><th   style="width:100px;">Item</th><th  style="width:100px;"># Correct<br>(Upper group)</th>
+	  <th ># Correct<br>(Lower group)</th><th >Difficulty<br>(p)</th><th >Discrimination<br>(D)</th></tr>
+	  
+	  <?php 
+	  $difficultyIndex = get_questionwise_difficulty_index($questionwise_array,$userCnt);
+		foreach($difficultyIndex as $k=>$di){
+	  ?>
+		 <tr><td>Question<br><?php echo ($k+1);?></td><td><?php echo $di['c_u_grp'];?></td><td><?php echo $di['c_l_grp'];?></td><td><?php echo $di['difficulty'];?></td><td><?php echo $di['dicrimination'];?></td></tr> 
+      <?php }?>
+      </table>
+      
+      </div>
 
   </div><!-- /#page-wrapper -->
 

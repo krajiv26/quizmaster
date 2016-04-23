@@ -751,6 +751,27 @@ ini_set("display_errors",1);
 		 return $final_result;
   }
   
+  function get_questionwise_difficulty_index($questionwise_array,$userCnt){
+	  $groupCnt = intval($userCnt/2);
+
+	   $final_array = array();
+	   $j = 0;
+		foreach($questionwise_array as $v){
+			for($i=0; $i<$groupCnt; $i++){
+			@$final_array[$j]['c_u_grp'] += $v[$i];
+		    }
+		    for($i=$groupCnt; $i<$groupCnt*2; $i++){
+			@$final_array[$j]['c_l_grp'] += $v[$i];
+		    }
+		    
+		    $final_array[$j]['difficulty'] = ($final_array[$j]['c_u_grp'] + $final_array[$j]['c_l_grp'])/($groupCnt*2);
+		    $final_array[$j]['dicrimination'] = ($final_array[$j]['c_u_grp'] - $final_array[$j]['c_l_grp'])/($groupCnt);
+		    $j++;
+		}
+	return $final_array;
+	  
+  }
+  
   function get_percentage_score($final_result){
 	  $score = 0;
 	  foreach($final_result as $k=>$v){
