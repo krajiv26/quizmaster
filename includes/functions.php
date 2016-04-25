@@ -324,7 +324,7 @@ ini_set("display_errors",1);
 		global $db;
 
 	  	$query  = "SELECT * ";
-	  	$query .= "FROM `quiz_score` where quiz_id = {$quiz_id}";
+	  	$query .= "FROM `quiz_score` where quiz_id = {$quiz_id} ORDER BY `score` DESC";
 
 	  	$result = mysqli_query($db, $query);
 	  	confirm_query($result);
