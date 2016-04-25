@@ -71,17 +71,18 @@ table, th, td {   border: 1px solid black;}
 th {background-color:#B4A682;}
 td{background-color:#E0E6CF;}
 th, td{	text-align:center;}
+.no_row td{background-color:#F5F5F5;}
 
 </style>
       
    <div class="col-lg-12">
 
-      <div>
-		  <h2>Score Analysis</h2>
+		  <h2>Split-Half Reliability KR-20</h2>
       <table  >
-	  <tr><th  rowspan="2" style="width:100px;">Name</th><th  rowspan="2" style="width:100px;">Total<br>Score (%)</th><th colspan="<?php echo $quiz_q_count;?>">Question</th></tr>
+	  <tr><th  rowspan="2" style="width:100px;">Name</th><th  rowspan="2" style="width:100px;">Total<br>Score (%)</th><th colspan="<?php echo $quiz_q_count;?>">Question</th><th  rowspan="2" style="width:50px;">Total<br>Score</th></tr>
 	  <tr>
-	  <?php for($i=1; $i <= $quiz_q_count;$i++){
+	  <?php 
+	  for($i=1; $i <= $quiz_q_count;$i++){
 			echo "<th style='width:45px;'>".$i."</th>";
 			}
 		?>
@@ -90,33 +91,75 @@ th, td{	text-align:center;}
 	  <?php 
 	  $questionwise_array = array();
 	  $userCnt = 0;
+	  $total_score = array();
 	  while($row = mysqli_fetch_assoc($quiz_score)) { 
 		   $userCnt++;
 		  $sc_analysis = get_score_analysis($row['answer_sl'],$row['quiz_id']);
+		  //pr($sc_analysis);
+		  
 		  foreach($sc_analysis as $key => $val){
 		  $questionwise_array[$key][] = $val;
 			}
 			
 		  $percent = get_percentage_score($sc_analysis);
 		  ?>
-		<tr><td><?php echo $row['user_id']; ?></td><td><?php echo $percent; ?></td>
+		<tr><td><?php $user = get_user_by_id($row['user_id']); echo $user['username']; ?></td><td><?php echo $percent; ?></td>
 		<?php foreach($sc_analysis as $k => $v){
 			echo "<td>".$v."</td>";
 			}
 		?>
-		
+		<td style="background-color:#fff;"><?php echo $total_score[] = array_sum($sc_analysis); ?></td>
 		</tr>
 	
 	<?php 	}	  ?>
-		  
-      
+		<tr class="no_row" ><td><strong>No of 1's</strong></td><td> </td>
+		<?php foreach($questionwise_array as $k => $v){
+			echo "<td>".array_sum($v)."</td>";
+			}
+		?>
+		<td style="background-color:#fff;"></td>
+		</tr>  
+		<tr ><td >Proportion Passed (p)</td><td> </td>
+		<?php foreach($questionwise_array as $k => $v){
+			echo "<td>".(array_sum($v)/$userCnt)."</td>";
+			}
+		?>
+		<td style="background-color:#fff;"></td>
+		</tr>
+		<tr class="no_row"><td >Proportion Failed (q)</td><td> </td>
+		<?php foreach($questionwise_array as $k => $v){
+			echo "<td>".(1 - (array_sum($v)/$userCnt))."</td>";
+			}
+		?>
+		<td style="background-color:#fff;"></td>
+		</tr>
+        <tr ><td > p x q </td><td> </td>
+		<?php 
+		$sumPQ = 0;
+		foreach($questionwise_array as $k => $v){
+			echo "<td>".$sumPQ += ((array_sum($v)/$userCnt)*(1 - (array_sum($v)/$userCnt)))."</td>";
+			}
+			//$a = array(9,2,5,4,12,7,8,11,9,3,7,4,12,5,4,10,9,6,9,4);
+			$st_dev = mystats_standard_deviation($total_score);
+		?>
+		<td style="background-color:#fff;"></td>
+		</tr>
+		<tr><td colspan="20"><div style="text-align:left;margin-left:100px;"><strong>k = <?php echo $quiz_q_count; ?> i.e No. of Questions<br>
+		 	&Sigma;pq = <?php echo $sumPQ; ?> i.e Summation of p x q<br>
+		 	&sigma;<sup>2</sup> = <?php echo $st_dev*$st_dev; ?> i.e square of standard deviation of Total score for each student<br>
+		 	r<sub>KR20</sub> = [ k/(k-1) ] * [ 1- (&Sigma;pq/&sigma;<sup>2</sup>) ]<br>
+		 	r<sub>KR20</sub> = [ <?php echo $quiz_q_count; ?>/(<?php echo $quiz_q_count; ?>-1) ] * [ 1- (<?php echo $sumPQ; ?>/<?php echo $st_dev*$st_dev; ?>) ]<br>
+		    r<sub>KR20</sub> = [ <?php echo ($quiz_q_count/($quiz_q_count -1));?> ] * [ <?php echo (1- ($sumPQ/($st_dev*$st_dev))); ?> ]<br><br>
+		    r<sub>KR20</sub> = <?php echo ($quiz_q_count/($quiz_q_count -1)) * (1- ($sumPQ/($st_dev*$st_dev)));?><br><br>
+		
+		</strong></div></td></tr>
+		
       </table>
       
       </div>
       <!--- -->  
        <div class="col-lg-12">
 
-      <div>
 		  <h2>Difficulty Index and the Discrimination Index</h2>
       <table  >
 	  <tr><th   style="width:100px;">Item</th><th  style="width:100px;"># Correct<br>(Upper group)</th>
@@ -131,6 +174,7 @@ th, td{	text-align:center;}
       </table>
       
       </div>
+     
 
   </div><!-- /#page-wrapper -->
 
