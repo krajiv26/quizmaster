@@ -137,12 +137,12 @@ th, td{	text-align:center;}
 		<?php 
 		$sumPQ = 0;
 		foreach($questionwise_array as $k => $v){
-			echo "<td>".$sumPQ += ((array_sum($v)/$userCnt)*(1 - (array_sum($v)/$userCnt)))."</td>";
+			$sumPQ += ((array_sum($v)/$userCnt)*(1 - (array_sum($v)/$userCnt)));
+			echo "<td>".((array_sum($v)/$userCnt)*(1 - (array_sum($v)/$userCnt)))."</td>";
 			}
-			//$a = array(9,2,5,4,12,7,8,11,9,3,7,4,12,5,4,10,9,6,9,4);
 			$st_dev = mystats_standard_deviation($total_score);
 		?>
-		<td style="background-color:#fff;"></td>
+		<td style="background-color:#fff;"><strong><?php echo $sumPQ;?></strong></td>
 		</tr>
 		<tr><td colspan="20"><div style="text-align:left;margin-left:100px;"><strong>k = <?php echo $quiz_q_count; ?> i.e No. of Questions<br>
 		 	&Sigma;pq = <?php echo $sumPQ; ?> i.e Summation of p x q<br>
