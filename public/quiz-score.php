@@ -103,7 +103,7 @@ th, td{	text-align:center;}
 			
 		  $percent = get_percentage_score($sc_analysis);
 		  ?>
-		<tr><td><?php $user = get_user_by_id($row['user_id']); echo $user['username']; ?></td><td><?php echo $percent; ?></td>
+		<tr><td><?php $user = get_user_by_id($row['user_id']); echo $user['username']; ?></td><td><?php echo intval($percent); ?></td>
 		<?php foreach($sc_analysis as $k => $v){
 			echo "<td>".$v."</td>";
 			}
