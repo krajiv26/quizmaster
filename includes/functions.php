@@ -751,6 +751,33 @@ ini_set("display_errors",1);
 		 return $final_result;
   }
   
+  function get_ques_difficulty_level($answer_sl,$quiz_id)
+  {
+	  $quesDlevel = array();
+	   $data = @unserialize($answer_sl);
+		//pr($data,1);
+		$question_data = array();
+		foreach($data as $k => $v)
+		{
+			$key = substr($k,9);
+			if(intval($key) == 0) continue;  //other than quesiton_* will be removed
+			$question_data[substr($k,9)] = $v;
+		}
+		  $all_q_id = get_quiz_questions_id($quiz_id);
+		  $final_result = array();
+		  foreach($all_q_id as $k => $v){
+				$q_ans =get_question_answers($k);
+				$ans_id = @$question_data[$k];
+				foreach($q_ans as $key => $val){
+					$quesDlevel[$k][$key]= ($val['answer_id'] == $ans_id )?1:0;
+					if($key == 3) {
+						$quesDlevel[$k][4] = (array_sum($quesDlevel[$k]) == 0)?1:0;
+					} 
+				}
+		  }
+		 return $quesDlevel;
+  }
+  
   function get_questionwise_difficulty_index($questionwise_array,$userCnt){
 	  $groupCnt = intval($userCnt/2);
 

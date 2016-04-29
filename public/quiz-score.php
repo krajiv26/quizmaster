@@ -91,12 +91,13 @@ th, td{	text-align:center;}
 	  <?php 
 	  $questionwise_array = array();
 	  $userCnt = 0;
+	  $quesDlevel = array();
 	  $total_score = array();
 	  while($row = mysqli_fetch_assoc($quiz_score)) { 
 		   $userCnt++;
 		  $sc_analysis = get_score_analysis($row['answer_sl'],$row['quiz_id']);
 		  //pr($sc_analysis);
-		  
+		  $quesDlevel[$row['user_id']] =  get_ques_difficulty_level($row['answer_sl'],$row['quiz_id']);
 		  foreach($sc_analysis as $key => $val){
 		  $questionwise_array[$key][] = $val;
 			}
@@ -111,7 +112,11 @@ th, td{	text-align:center;}
 		<td style="background-color:#fff;"><?php echo $total_score[] = array_sum($sc_analysis); ?></td>
 		</tr>
 	
-	<?php 	}	  ?>
+	<?php 	}	
+	
+	//pr($quesDlevel);
+	//exit;
+	  ?>
 		<tr class="no_row" ><td><strong>No of 1's</strong></td><td> </td>
 		<?php foreach($questionwise_array as $k => $v){
 			echo "<td>".array_sum($v)."</td>";
@@ -174,7 +179,38 @@ th, td{	text-align:center;}
       </table>
       
       </div>
+     <!---->
      
+     <div class="col-lg-12">
+
+		  <h2>Question Difficulty Level</h2>
+      <table  >
+	  <tr><th   style="width:100px;">Question</th><th style="width:70px;">A</th>
+	  <th style="width:70px;">B</th><th style="width:70px;">C</th><th style="width:70px;">D</th><th style="width:70px;">NA</th></tr>
+	  
+	  <?php 
+		$final_quesD = array();
+		foreach($quesDlevel as $quesD){
+			foreach($quesD as $k=>$qu){
+			   if(!is_array(@$final_quesD[$k])) $final_quesD[$k] = array();
+				$c = array_map(function () {
+					return array_sum(func_get_args());
+				},$qu,@$final_quesD[$k]);
+				$final_quesD[$k] = $c;
+			}
+		}
+		$i =1;
+		foreach($final_quesD as $k=>$di){
+			$q_ans = get_question_answers($k);
+	     ?>
+		 <tr><td>#<?php echo ($i);?></td><td><?php echo $di[0]; echo ($q_ans[0]['is_correct'] == 1)?'*':'';?></td><td><?php echo $di[1]; echo ($q_ans[1]['is_correct'] == 1)?'*':'';?></td><td><?php echo $di[2]; echo ($q_ans[2]['is_correct'] == 1)?'*':'';?></td><td><?php echo $di[3]; echo ($q_ans[3]['is_correct'] == 1)?'*':'';?></td><td><?php echo $di[4];?></td></tr> 
+      <?php 
+      $i++;
+      }?>
+      <tr><td colspan="6">*NA stands for Not Attempted i.e. selected none of the 4 options</td></tr>
+      </table>
+      
+      </div>
 
   </div><!-- /#page-wrapper -->
 
