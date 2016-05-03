@@ -56,6 +56,7 @@
       $quiz_id      = $id;
       $quiz_name    = $_POST['quiz_name'];
       $category     = $_POST['category'];
+      $allowedTime     = $_POST['allowed_time'];
       $deadline     = $_POST['deadline'];
       $attempts     = $_POST['attempts'];
 
@@ -65,6 +66,7 @@
         $query  = "UPDATE quiz SET ";
         $query .= "quiz_name = '{$quiz_name}', ";
         $query .= "category = '{$category}', ";
+        $query .= "allowed_time = '{$allowedTime}', ";
         $query .= "deadline = NULL, ";
         $query .= "attempts = '{$attempts}' ";
         $query .= "WHERE quiz_id = {$quiz_id} ";
@@ -73,6 +75,7 @@
         $query  = "UPDATE quiz SET ";
         $query .= "quiz_name = '{$quiz_name}', ";
         $query .= "category = '{$category}', ";
+        $query .= "allowed_time = '{$allowedTime}', ";
         $query .= "deadline = '{$deadline}', ";
         $query .= "attempts = '{$attempts}' ";
         $query .= "WHERE quiz_id = {$quiz_id} ";
@@ -158,6 +161,10 @@
                 <div class="form-group col-lg-3">
                   <label for="category" class="control-label">Quiz Category</label>
                   <input type="text" class="form-control" id="category" value="<?php echo $quiz["category"]; ?>" name="category" placeholder="Quiz Category (ex. CINS 370)">
+                </div>
+                <div class="form-group col-lg-3">
+                  <label for="deadline" class="control-label">Allowed Time(Minutes)</label>
+                  <input type="text" class="form-control" id="allowed_time" value="<?php echo $quiz["allowed_time"]; ?>" name="allowed_time" placeholder="60 (in minutes)">
                 </div>
                 <div class="form-group col-lg-3">
                   <label for="deadline" class="control-label">Quiz Deadline</label>

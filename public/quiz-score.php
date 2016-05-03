@@ -211,6 +211,155 @@ th, td{	text-align:center;}
       </table>
       
       </div>
+     <!---->
+     
+     <div class="col-lg-12">
+
+		  <h2>Question Discrimination Index Revised</h2>
+      <table  >
+	  
+	  <?php 
+		
+		$groupCnt = intval($userCnt*0.27);
+		//pr($quesDlevel); 
+		$quesDlevelU = array();
+		$quesDlevelL = array();
+		$i = 0 ;
+		foreach($quesDlevel as $key=>$quesD){
+			if($i< $groupCnt){
+				$quesDlevelU[$key] = $quesD;
+		    }
+		    if($i >= ($userCnt - $groupCnt)){
+				$quesDlevelL[$key] = $quesD;
+		    }
+		    $i++;
+		}
+
+		$final_quesDL = array();
+		$final_quesDU = array();
+		
+		foreach($quesDlevelU as $quesD){
+			foreach($quesD as $k=>$qu){
+			   if(!is_array(@$final_quesDU[$k])) $final_quesDU[$k] = array();
+				$c = array_map(function () {
+					return array_sum(func_get_args());
+				},$qu,@$final_quesDU[$k]);
+				$final_quesDU[$k] = $c;
+			}
+		}
+		foreach($quesDlevelL as $quesD){
+			foreach($quesD as $k=>$qu){
+			   if(!is_array(@$final_quesDL[$k])) $final_quesDL[$k] = array();
+				$c = array_map(function () {
+					return array_sum(func_get_args());
+				},$qu,@$final_quesDL[$k]);
+				$final_quesDL[$k] = $c;
+			}
+		}
+
+		$i =1;
+		foreach($final_quesDU as $k=>$di){
+			$correctAnsIndex = 0;
+			$q_ans = get_question_answers($k);
+			foreach($q_ans as $p=>$v){
+				if($v['is_correct'] == 1)  $correctAnsIndex = $p;
+				}
+	     ?>
+	     <tr class="grp1_<?php echo ($i);?>"><th   style="width:100px;">Item No.</th><th style="width:100px;">Group Criterion(27%)</th><th style="width:70px;"><?php echo ($correctAnsIndex == 0)?'<span style="color:#ff0000;">*A</span>':'<span style="color:#000;">A</span>';?></th>
+	    <th style="width:70px;"><?php echo ($correctAnsIndex == 1)?'<span style="color:#ff0000;">*B</span>':'<span style="color:#000;">B</span>';?></th><th style="width:70px;"><?php echo ($correctAnsIndex == 2)?'<span style="color:#ff0000;">*C</span>':'<span style="color:#000;">C</span>';?></th><th style="width:70px;"><?php echo ($correctAnsIndex == 3)?'<span style="color:#ff0000;">*D</span>':'<span style="color:#000;">D</span>';?></th><th style="width:70px;">NA</th><th >Discrimination Index</th><th >Remarks</th><th >Action</th></tr>
+		 <tr class="grp1_<?php echo ($i);?>"><td rowspan="2"><?php echo ($i);?></td><td >Upper Group(<?php echo $groupCnt;?>)</td><td><?php echo $di[0];?></td><td><?php echo $di[1]; ?></td><td><?php echo $di[2];?></td><td><?php echo $di[3]; ?></td><td><?php echo $di[4];?></td><td rowspan="2"><?php echo $discIndex = (($final_quesDU[$k][$correctAnsIndex] - $final_quesDL[$k][$correctAnsIndex])/$groupCnt)?></td><td rowspan="2"><?php echo range_discrimination($discIndex);?></td><td rowspan="2"><a target="_blank" href="edit-question.php?question_id=<?php echo $i;?>">Revise</a> or <a  data-toggle="modal" data-target="#confirm-delete-modal1"  onclick="sendId1(<?php echo $i;?>);" >Discard</a></td></tr> 
+		 <tr class="grp1_<?php echo ($i);?>"><td >Lower Group(<?php echo $groupCnt;?>)</td><td><?php echo $final_quesDL[$k][0];?></td><td><?php echo $final_quesDL[$k][1]; ?></td><td><?php echo $final_quesDL[$k][2];?></td><td><?php echo $final_quesDL[$k][3]; ?></td><td><?php echo $final_quesDL[$k][4];?></td></tr> 
+	<?php 
+      $i++;
+      }?>
+      <tr><td colspan="10">*NA stands for Not Attempted i.e. selected none of the 4 options</td></tr>
+      </table>
+      
+      </div>
+    
+    <div class="col-lg-12">
+
+		  <h2>Question Difficulty Index Revised</h2>
+      <table  >
+		  <?php
+			$i =1;
+		foreach($final_quesDU as $k=>$di){
+			$correctAnsIndex = 0;
+			$q_ans = get_question_answers($k);
+			foreach($q_ans as $p=>$v){
+				if($v['is_correct'] == 1)  $correctAnsIndex = $p;
+				}
+	     ?>
+	     <tr class="grp_<?php echo ($i);?>"><th   style="width:100px;">Item No.</th><th style="width:100px;">Group Criterion(27%)</th><th style="width:70px;"><?php echo ($correctAnsIndex == 0)?'<span style="color:#ff0000;">*A</span>':'<span style="color:#000;">A</span>';?></th>
+	    <th style="width:70px;"><?php echo ($correctAnsIndex == 1)?'<span style="color:#ff0000;">*B</span>':'<span style="color:#000;">B</span>';?></th><th style="width:70px;"><?php echo ($correctAnsIndex == 2)?'<span style="color:#ff0000;">*C</span>':'<span style="color:#000;">C</span>';?></th><th style="width:70px;"><?php echo ($correctAnsIndex == 3)?'<span style="color:#ff0000;">*D</span>':'<span style="color:#000;">D</span>';?></th><th style="width:70px;">NA</th><th style="width:70px;">Difficulty Index</th><th >Remarks</th><th >Action</th></tr>
+		 <tr class="grp_<?php echo ($i);?>"><td rowspan="2"><?php echo ($i);?></td><td >Upper Group(<?php echo $groupCnt;?>)</td><td><?php echo $di[0];?></td><td><?php echo $di[1]; ?></td><td><?php echo $di[2];?></td><td><?php echo $di[3]; ?></td><td><?php echo $di[4];?></td><td rowspan="2"><?php echo $diffIndex = (($final_quesDU[$k][$correctAnsIndex] + $final_quesDL[$k][$correctAnsIndex])/($groupCnt*2)); ?></td><td rowspan="2"><?php echo range_difficulty($diffIndex);?></td><td rowspan="2"><a target="_blank" href="edit-question.php?question_id=<?php echo $i;?>">Revise</a> or <a  data-toggle="modal" data-target="#confirm-delete-modal"  onclick="sendId(<?php echo $i;?>);" >Discard</a></td></tr> 
+		 <tr class="grp_<?php echo ($i);?>"><td >Lower Group(<?php echo $groupCnt;?>)</td><td><?php echo $final_quesDL[$k][0];?></td><td><?php echo $final_quesDL[$k][1]; ?></td><td><?php echo $final_quesDL[$k][2];?></td><td><?php echo $final_quesDL[$k][3]; ?></td><td><?php echo $final_quesDL[$k][4];?></td></tr> 
+		
+	<?php 
+      $i++;
+      }?>
+      <tr><td colspan="10">*NA stands for Not Attempted i.e. selected none of the 4 options</td></tr>
+      </table>
+       <!-- Confirm Deletion Modal -->
+        <div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="confirm-delate-label">Warning!</h4>
+              </div>
+              <div class="modal-body">
+                Are you sure to discard this item?
+                <input type="hidden" name="bookId" id="bookId" value=""/>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <a onclick="hideTr();" class="btn btn-primary">Yes</a>
+              </div>
+            </div>
+          </div>
+        </div><!-- /.modal fade -->
+       
+       <!-- Confirm Deletion Modal -->
+        <div class="modal fade" id="confirm-delete-modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="confirm-delate-label">Warning!</h4>
+              </div>
+              <div class="modal-body">
+                Are you sure to discard this item?
+                <input type="hidden" name="bookId1" id="bookId1" value=""/>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <a onclick="hideTr1();" class="btn btn-primary">Yes</a>
+              </div>
+            </div>
+          </div>
+        </div><!-- /.modal fade -->
+    </div>
+
+<script type='text/javascript'>
+function sendId(value){
+	 $(".modal-body #bookId").val( value );
+	}
+function hideTr(){
+	var id = $(".modal-body #bookId").val();
+	$(".grp_"+id).hide();
+	$('#confirm-delete-modal').modal('hide');
+	}
+function sendId1(value){
+	 $(".modal-body #bookId1").val( value );
+	}
+function hideTr1(){
+	var id = $(".modal-body #bookId1").val();
+	$(".grp1_"+id).hide();
+	$('#confirm-delete-modal1').modal('hide');
+	}
+</script>
+
 
   </div><!-- /#page-wrapper -->
 

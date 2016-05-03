@@ -610,6 +610,8 @@ ini_set("display_errors",1);
 	  	return $result;
 	}
 	
+	
+	
 	function get_quiz_questions_id($quiz_id) {
 		
 		global $db;
@@ -624,6 +626,24 @@ ini_set("display_errors",1);
 		  $q_ids[$row["question_id"]] = "";
 		}
 	  	return $q_ids;
+	  	
+	}
+	
+	function get_allowed_time($quiz_id) {
+		
+		global $db;
+		$where = " quiz_id={$quiz_id}";
+	  	$query  = "SELECT allowed_time ";
+	  	$query .= "FROM quiz WHERE {$where} LIMIT 1";
+	  	//echo $query; exit;
+	  	
+		$user_set = mysqli_query($db, $query);
+		confirm_query($user_set);
+		if($user = mysqli_fetch_assoc($user_set)) {
+			return $user['allowed_time'];
+		} else {
+			return null;
+		}
 	  	
 	}
 
@@ -779,15 +799,14 @@ ini_set("display_errors",1);
   }
   
   function get_questionwise_difficulty_index($questionwise_array,$userCnt){
-	  $groupCnt = intval($userCnt/2);
-
+	  $groupCnt = intval($userCnt*0.27);
 	   $final_array = array();
 	   $j = 0;
 		foreach($questionwise_array as $v){
 			for($i=0; $i<$groupCnt; $i++){
 			@$final_array[$j]['c_u_grp'] += $v[$i];
 		    }
-		    for($i=$groupCnt; $i<$groupCnt*2; $i++){
+		    for($i=($userCnt - $groupCnt); $i< $userCnt; $i++){
 			@$final_array[$j]['c_l_grp'] += $v[$i];
 		    }
 		    
@@ -799,6 +818,20 @@ ini_set("display_errors",1);
 	  
   }
   
+  function range_difficulty($value){
+	   $text = "";
+		if($value >= 0.81)  $text = "Easy";
+		else if($value < 0.81 && $value >= 0.20) $text = "Right Difficulty";
+		else $text = "Difficult";
+		return $text;
+	  }
+  function range_discrimination($value){
+	   $text = "";
+		if($value >= 0.46)  $text = "Discriminating item";
+		else if($value < 0.46 && $value >= -0.55) $text = "Non-discriminating";
+		else $text = "Can discriminate but item is questionable";
+		return $text;
+	  }
   function mystats_standard_deviation(array $a, $sample = false) {
         $n = count($a);
         if ($n === 0) {
