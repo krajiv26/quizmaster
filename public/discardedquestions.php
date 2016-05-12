@@ -1,7 +1,7 @@
 <?php require_once("../includes/sessions.php"); ?>
 <?php require_once("../includes/db-connection.php"); ?>
 <?php require_once("../includes/functions.php"); ?>
-<?php $page = "manage-questions.php"; 
+<?php $page = "discardedquestions.php"; 
 error_reporting(E_ALL);
 ini_set("display_errors",1);
 $cat = get_all_category();
@@ -24,7 +24,7 @@ if($key !="")
 	if($where != "")
 		$where .= " AND question_text like '%{$key}%'";
 	else
-		$where .= " question_text like '%{$key}%'";
+		$where .= " question_text like '%{$key}%' AND is_discarded = 1";
 }
 
 $cat_id = (isset($_GET['category']))? $_GET['category']:"";
@@ -33,7 +33,7 @@ if($cat_id !="")
 	if($where != "")
 		$where .= " AND category = {$cat_id}";
 	else
-		$where .= " category = {$cat_id}";
+		$where .= " category = {$cat_id} AND is_discarded = 1";
 }
 
 $ans = (isset($_GET['ans']))? intval($_GET['ans']): 0;
@@ -46,13 +46,13 @@ if($ans > 0)
 	if($where != "")
 		$where .= " AND is_answered = {$ans}";
 	else
-		$where .= " is_answered = {$ans}";
+		$where .= " is_answered = {$ans} AND is_discarded = 1";
 	$ans = ($ans === 0)? 2 : $ans;
 }
 
 
 //where script ends
-$questions_list = get_all_questions($where); 
+$questions_list = get_all_questions_discarded($where); 
 $total = $questions_list->num_rows;
 
 parse_str($_SERVER["QUERY_STRING"], $output);
@@ -71,7 +71,7 @@ else
 	$start = 0;
 
 
-$questions_list = get_all_questions_limit($start,$limit,$where);
+$questions_list = get_all_questions_limit_discarded($start,$limit,$where);
 
 $pagination_html = pagination($targetpage,$total,$limit,$p);
 ?>
@@ -99,10 +99,10 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
     
     <div class="row">
       <div class="col-lg-12">
-        <h1>Manage Questions <small>Control Panel</small></h1>
+        <h1>Discarded Questions <small>Control Panel</small></h1>
         <ol class="breadcrumb">
           <li><a href="dashboard.php"><i class="icon-dashboard"></i> Dashboard</a></li>
-          <li class="active"><i class="icon-file-alt"></i> Manage Questions</li>
+          <li class="active"><i class="icon-file-alt"></i> Discarded Questions</li>
         </ol>
 
         <?php echo user_form_success_msg(); ?>
@@ -177,12 +177,7 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
             <div style="float:left;clear:both;">
                 <button type ="button"  id="show-answer" name="show-answer" value="show-answer" class="btn btn-primary pull-right tbp-flush-right">Hide All Answer</button>
             </div>
-            <?php if(checkUserType() == 'admin') { ?>
-            <div class="col-sm-offset-10 col-sm-2" style="margin-bottom:10px;">
-             <label for="submit-assign-question"></label>
-                <button type ="submit"  id="assign-question" name="assign-question" value="assign-question" class="btn btn-primary pull-right tbp-flush-right">Assign Question</button>
-           </div>
-             <?php } ?>
+           
             <div class="table-responsive" style="clear:both;">
             <table class="table table-bordered table-hover table-striped tablesorter">
               <thead>
@@ -215,9 +210,8 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
                     <td  ><a style ="cursor:pointer;<?php echo $discardStyle;?>" <?php echo $discardStyle;?> onclick="$('#ans_<?php echo $row['question_id'];?>').toggle();"><?php echo checkAnsFormat($row['question_text']); ?></a></td>
                     <td><?php echo $cat[$row['category']]; ?></td>
                     <td><?php echo $answered[$row['is_answered']]; ?></td>
-                    <?php if(checkUserType() == 'admin') {
-						 ?><td>
-                        <a  onclick="assign_question(<?php echo htmlentities($row['question_id']); ?>,<?php echo $row['is_discarded'];?>);"><i class="fa fa-user fa-2x"></i></a>                
+                    <?php if(checkUserType() == 'admin') { ?><td>
+                        <a href="assign-question.php?question_id=<?php echo htmlentities($row['question_id']); ?>" ><i class="fa fa-user fa-2x"></i></a>                
                     </td>
                     <td>
                         <a href="edit-question.php?question_id=<?php echo htmlentities($row['question_id']); ?>" ><i class="fa fa-edit fa-2x"></i></a>                
@@ -280,11 +274,9 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
         }
     });
     
-   
     
    $('#assign-question').click(function(event) {  //on click
        var selected = 0;
-       alert("Discarded Question among your selection for assign will be ignored");
             $('.checkbox1').each(function() { //loop through each checkbox
                if(this.checked == true)
                    selected = selected + 1;
@@ -307,13 +299,5 @@ $pagination_html = pagination($targetpage,$total,$limit,$p);
       
     });
 });
-
-function assign_question(qs_id,is_discarded){
-	   if(is_discarded == 1){
-		   alert("Cant be assigned, this question is discarded");
-		   return false;
-	   }
-	   window.location.href = 'assign-question.php?question_id='+qs_id;
-   } 
   </script>
 <?php require_once("../includes/db-connection-close.php"); ?>

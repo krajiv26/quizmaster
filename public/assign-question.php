@@ -11,7 +11,8 @@
 $check = "";
 if(isset($_POST['assign-question']))
 {
-    $check = implode(",", $_POST['check']);
+    $checkwithoutdiscard  = remove_discarded_question($_POST['check']);
+    $check = implode(",", $checkwithoutdiscard);
 }
 if($_SESSION["get_query"] != "")
 $redirect_url = "manage-questions.php?".$_SESSION["get_query"];

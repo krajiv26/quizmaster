@@ -20,10 +20,11 @@
 	  </ul>
 	</li>
 
-	<li class="dropdown <?php echo (($page == "manage-questions.php" || $page == "edit-question.php" || $page == "new-question.php" || $page == "import-question.php") ? "open" : "")?>">
+	<li class="dropdown <?php echo (($page == "manage-questions.php" || $page == "edit-question.php" || $page == "discardedquestions.php" || $page == "new-question.php" || $page == "import-question.php") ? "open" : "")?>">
 	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Questions <b class="caret"></b></a>
 	  <ul class="dropdown-menu">
 	    <li class="<?php echo ($page == "manage-questions.php" ? "active" : "")?>"><a href="manage-questions.php">Manage Questions</a></li>
+	    <li class="<?php echo ($page == "discardedquestions.php" ? "active" : "")?>"><a href="discardedquestions.php">Discarded Questions</a></li>
 	    <li class="<?php echo ($page == "new-question.php" ? "active" : "")?>"><a href="new-question.php">New Question</a></li>
 		<li class="<?php echo ($page == "import-question.php" ? "active" : "")?>"><a href="import-question.php">Import Question</a></li>
 	  </ul>

@@ -5,7 +5,8 @@
 
 <?php $page = "edit-question.php"; 
 //pr($_SESSION["get_query"],1);
-if($_SESSION["get_query"] != "")
+
+if(isset($_SESSION["get_query"]) && $_SESSION["get_query"] != "")
 $redirect_url = "manage-questions.php?".$_SESSION["get_query"];
 else
 $redirect_url = "manage-questions.php";

@@ -508,6 +508,8 @@ ini_set("display_errors",1);
 	  	return $result;
 	}
 	
+	
+	
 	function get_all_questions_limit($start,$limit,$where = ' 1 = 1') {
 		global $db;
 		$where = ($where == "")?' 1 = 1':$where;
@@ -517,6 +519,51 @@ ini_set("display_errors",1);
 	  	confirm_query($result);
 
 	  	return $result;
+	}
+	
+	function get_all_questions_discarded($where = ' is_discarded = 1') {
+		global $db;
+		$where = ($where == "")?' is_discarded = 1':$where;
+	  	$query  = "SELECT * ";
+	  	$query .= "FROM question WHERE {$where}";
+	  	//echo $query; exit;
+	  	$result = mysqli_query($db, $query);
+	  	confirm_query($result);
+
+	  	return $result;
+	}
+	
+	function get_all_questions_limit_discarded($start,$limit,$where = ' is_discarded = 1') {
+		global $db;
+		$where = ($where == "")?' is_discarded = 1':$where;
+	  	$query  = "SELECT * ";
+	  	$query .= "FROM question WHERE {$where} LIMIT {$start} ,{$limit}";
+	  	$result = mysqli_query($db, $query);
+	  	confirm_query($result);
+
+	  	return $result;
+	}
+	
+	function remove_discarded_question($qs_list){
+		$new_qa_list = array();
+		if(is_array($qs_list)){
+			foreach($qs_list as $qs){
+				if(isDiscarded($qs) == 0) $new_qa_list[] = $qs;
+			}
+		}
+		return $new_qa_list;
+	}
+	
+	function isDiscarded($qid) {
+		global $db;
+		$query1 = "SELECT is_discarded FROM question WHERE question_id = {$qid}";
+		$result = mysqli_query($db, $query1);
+		confirm_query($result);
+		if($user = mysqli_fetch_assoc($result)) {
+			return $user['is_discarded'];
+		} else {
+			return null;
+		}
 	}
 	
         function get_all_essay_questions($where = ' 1 = 1') {
@@ -734,6 +781,14 @@ ini_set("display_errors",1);
 	function save_score($qs_id,$score) {
 		global $db;
 		$query1 = "UPDATE quiz_score SET score = {$score} WHERE qs_id = {$qs_id}";
+		$result = mysqli_query($db, $query1);
+		confirm_query($result);
+	}
+	
+	function discard_question($qid) {
+		global $db;
+		$query1 = "UPDATE question SET is_discarded = 1 WHERE question_id = {$qid}";
+
 		$result = mysqli_query($db, $query1);
 		confirm_query($result);
 	}
