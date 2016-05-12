@@ -265,10 +265,10 @@ th, td{	text-align:center;}
 				if($v['is_correct'] == 1)  $correctAnsIndex = $p;
 				}
 	     ?>
-	     <tr class="grp1_<?php echo ($i);?>"><th   style="width:100px;">Item No.</th><th style="width:100px;">Group Criterion(27%)</th><th style="width:70px;"><?php echo ($correctAnsIndex == 0)?'<span style="color:#ff0000;">*A</span>':'<span style="color:#000;">A</span>';?></th>
+	     <tr class="grp1_<?php echo ($k);?>"><th   style="width:100px;">Item No.</th><th style="width:100px;">Group Criterion(27%)</th><th style="width:70px;"><?php echo ($correctAnsIndex == 0)?'<span style="color:#ff0000;">*A</span>':'<span style="color:#000;">A</span>';?></th>
 	    <th style="width:70px;"><?php echo ($correctAnsIndex == 1)?'<span style="color:#ff0000;">*B</span>':'<span style="color:#000;">B</span>';?></th><th style="width:70px;"><?php echo ($correctAnsIndex == 2)?'<span style="color:#ff0000;">*C</span>':'<span style="color:#000;">C</span>';?></th><th style="width:70px;"><?php echo ($correctAnsIndex == 3)?'<span style="color:#ff0000;">*D</span>':'<span style="color:#000;">D</span>';?></th><th style="width:70px;">NA</th><th >Discrimination Index</th><th >Remarks</th><th >Action</th></tr>
-		 <tr class="grp1_<?php echo ($i);?>"><td rowspan="2"><?php echo ($i);?></td><td >Upper Group(<?php echo $groupCnt;?>)</td><td><?php echo $di[0];?></td><td><?php echo $di[1]; ?></td><td><?php echo $di[2];?></td><td><?php echo $di[3]; ?></td><td><?php echo $di[4];?></td><td rowspan="2"><?php echo $discIndex = (($final_quesDU[$k][$correctAnsIndex] - $final_quesDL[$k][$correctAnsIndex])/$groupCnt)?></td><td rowspan="2"><?php echo range_discrimination($discIndex);?></td><td rowspan="2"><a target="_blank" href="edit-question.php?question_id=<?php echo $i;?>">Revise</a> or <a  data-toggle="modal" data-target="#confirm-delete-modal1"  onclick="sendId1(<?php echo $i;?>);" style="cursor:pointer;" >Discard</a></td></tr> 
-		 <tr class="grp1_<?php echo ($i);?>"><td >Lower Group(<?php echo $groupCnt;?>)</td><td><?php echo $final_quesDL[$k][0];?></td><td><?php echo $final_quesDL[$k][1]; ?></td><td><?php echo $final_quesDL[$k][2];?></td><td><?php echo $final_quesDL[$k][3]; ?></td><td><?php echo $final_quesDL[$k][4];?></td></tr> 
+		 <tr class="grp1_<?php echo ($k);?>"><td rowspan="2"><?php echo ($i);?></td><td >Upper Group(<?php echo $groupCnt;?>)</td><td><?php echo $di[0];?></td><td><?php echo $di[1]; ?></td><td><?php echo $di[2];?></td><td><?php echo $di[3]; ?></td><td><?php echo $di[4];?></td><td rowspan="2"><?php echo $discIndex = (($final_quesDU[$k][$correctAnsIndex] - $final_quesDL[$k][$correctAnsIndex])/$groupCnt)?></td><td rowspan="2"><?php echo range_discrimination($discIndex);?></td><td rowspan="2"><a target="_blank" href="edit-question.php?question_id=<?php echo $k;?>">Revise</a> or <a  data-toggle="modal" data-target="#confirm-delete-modal1"  onclick="sendId1(<?php echo $k;?>);" style="cursor:pointer;" >Discard</a></td></tr> 
+		 <tr class="grp1_<?php echo ($k);?>"><td >Lower Group(<?php echo $groupCnt;?>)</td><td><?php echo $final_quesDL[$k][0];?></td><td><?php echo $final_quesDL[$k][1]; ?></td><td><?php echo $final_quesDL[$k][2];?></td><td><?php echo $final_quesDL[$k][3]; ?></td><td><?php echo $final_quesDL[$k][4];?></td></tr> 
 	<?php 
       $i++;
       }?>
@@ -290,10 +290,10 @@ th, td{	text-align:center;}
 				if($v['is_correct'] == 1)  $correctAnsIndex = $p;
 				}
 	     ?>
-	     <tr class="grp_<?php echo ($i);?>"><th   style="width:100px;">Item No.</th><th style="width:100px;">Group Criterion(27%)</th><th style="width:70px;"><?php echo ($correctAnsIndex == 0)?'<span style="color:#ff0000;">*A</span>':'<span style="color:#000;">A</span>';?></th>
+	     <tr class="grp_<?php echo ($k);?>"><th   style="width:100px;">Item No.</th><th style="width:100px;">Group Criterion(27%)</th><th style="width:70px;"><?php echo ($correctAnsIndex == 0)?'<span style="color:#ff0000;">*A</span>':'<span style="color:#000;">A</span>';?></th>
 	    <th style="width:70px;"><?php echo ($correctAnsIndex == 1)?'<span style="color:#ff0000;">*B</span>':'<span style="color:#000;">B</span>';?></th><th style="width:70px;"><?php echo ($correctAnsIndex == 2)?'<span style="color:#ff0000;">*C</span>':'<span style="color:#000;">C</span>';?></th><th style="width:70px;"><?php echo ($correctAnsIndex == 3)?'<span style="color:#ff0000;">*D</span>':'<span style="color:#000;">D</span>';?></th><th style="width:70px;">NA</th><th style="width:70px;">Difficulty Index</th><th >Remarks</th><th >Action</th></tr>
-		 <tr class="grp_<?php echo ($i);?>"><td rowspan="2"><?php echo ($i);?></td><td >Upper Group(<?php echo $groupCnt;?>)</td><td><?php echo $di[0];?></td><td><?php echo $di[1]; ?></td><td><?php echo $di[2];?></td><td><?php echo $di[3]; ?></td><td><?php echo $di[4];?></td><td rowspan="2"><?php echo $diffIndex = (($final_quesDU[$k][$correctAnsIndex] + $final_quesDL[$k][$correctAnsIndex])/($groupCnt*2)); ?></td><td rowspan="2"><?php echo range_difficulty($diffIndex);?></td><td rowspan="2"><a target="_blank" href="edit-question.php?question_id=<?php echo $i;?>">Revise</a> or <a  data-toggle="modal" data-target="#confirm-delete-modal"  onclick="sendId(<?php echo $i;?>);" >Discard</a></td></tr> 
-		 <tr class="grp_<?php echo ($i);?>"><td >Lower Group(<?php echo $groupCnt;?>)</td><td><?php echo $final_quesDL[$k][0];?></td><td><?php echo $final_quesDL[$k][1]; ?></td><td><?php echo $final_quesDL[$k][2];?></td><td><?php echo $final_quesDL[$k][3]; ?></td><td><?php echo $final_quesDL[$k][4];?></td></tr> 
+		 <tr class="grp_<?php echo ($k);?>"><td rowspan="2"><?php echo ($i);?></td><td >Upper Group(<?php echo $groupCnt;?>)</td><td><?php echo $di[0];?></td><td><?php echo $di[1]; ?></td><td><?php echo $di[2];?></td><td><?php echo $di[3]; ?></td><td><?php echo $di[4];?></td><td rowspan="2"><?php echo $diffIndex = (($final_quesDU[$k][$correctAnsIndex] + $final_quesDL[$k][$correctAnsIndex])/($groupCnt*2)); ?></td><td rowspan="2"><?php echo range_difficulty($diffIndex);?></td><td rowspan="2"><a target="_blank" href="edit-question.php?question_id=<?php echo $k;?>">Revise</a> or <a  data-toggle="modal" data-target="#confirm-delete-modal"  onclick="sendId(<?php echo $k;?>);" style="cursor:pointer;" >Discard</a></td></tr> 
+		 <tr class="grp_<?php echo ($k);?>"><td >Lower Group(<?php echo $groupCnt;?>)</td><td><?php echo $final_quesDL[$k][0];?></td><td><?php echo $final_quesDL[$k][1]; ?></td><td><?php echo $final_quesDL[$k][2];?></td><td><?php echo $final_quesDL[$k][3]; ?></td><td><?php echo $final_quesDL[$k][4];?></td></tr> 
 		
 	<?php 
       $i++;
@@ -343,19 +343,21 @@ th, td{	text-align:center;}
 
 <script type='text/javascript'>
 function sendId(value){
-	 $(".modal-body #bookId").val( value );
+	 $("#confirm-delete-modal .modal-body #bookId").val( value );
 	}
 function hideTr(){
 	var id = $(".modal-body #bookId").val();
 	$(".grp_"+id).hide();
 	$('#confirm-delete-modal').modal('hide');
+	$.ajax({url: "ajax-method.php?method=discard&qid="+id, success: function(result){
+    }});
 	}
 function sendId1(value){
-	 $(".modal-body #bookId1").val( value );
+	 $("#confirm-delete-modal1 .modal-body #bookId1").val( value );
 	}
 function hideTr1(){
 	var id = $(".modal-body #bookId1").val();
-	//$(".grp1_"+id).hide();
+	$(".grp1_"+id).hide();
 	$('#confirm-delete-modal1').modal('hide');
 	$.ajax({url: "ajax-method.php?method=discard&qid="+id, success: function(result){
     }});
