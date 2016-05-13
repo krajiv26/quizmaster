@@ -6,6 +6,7 @@
     <script src="js/bootstrap.js"></script>
     <script src="js/bootstrap-wysiwyg.js"></script>
     <script src="js/bootstrap3-wysihtml5.js"></script>
-    <script src="js/jquery.timer.js"></script>
+    <!--<script src="js/jquery.timer.js"></script>-->
+    <script src="js/timer.jquery.js"></script>
   </body>
 </html>

@@ -22,7 +22,7 @@ else
 <?php 
 
 $questions_list = get_quiz_questions($quiz_id); 
- 
+$allowedTime = get_allowed_time($quiz_id); 
 $total = $questions_list->num_rows;
 /*
 parse_str($_SERVER["QUERY_STRING"], $output);
@@ -46,8 +46,13 @@ $questions_list = get_quiz_questions_limit($quiz_id,$start,$limit);
 $pagination_html = pagination($targetpage,$total,$limit,$p);*/
 $begin_time = time();
 $active =1;
+
+
 if(isset($_SESSION['user']['quiz']['qs_id']) && $_SESSION['user']['quiz']['qs_id'] != "")
 {
+	
+	
+	
 	$quiz_score  = get_quiz_score($_SESSION['user']['quiz']['qs_id']);
     
     $begin_time = time() - $quiz_score['lapse_time'];
@@ -56,7 +61,9 @@ if(isset($_SESSION['user']['quiz']['qs_id']) && $_SESSION['user']['quiz']['qs_id
 	$active = $quiz_score['active'];
 	unset($data['active']);
 	unset($data['begin_time']);
-	//pr($data,1);
+	//pr($data);
+	//echo "<br>active".$active;
+	$question_data = array();
 	foreach($data as $k => $v)
 	{
 		$key = substr($k,9);
@@ -79,13 +86,16 @@ if(isset($_SESSION['user']['quiz']['qs_id']) && $_SESSION['user']['quiz']['qs_id
 		$final_result['total_question'] = $total;
 		$final_result['correct_answer'] = get_score($fquestion_data,$answer_data);
 		$final_result['result_percentage'] = ($final_result['correct_answer']*100)/$total;
+		//pr($final_result);
 		save_score($_SESSION['user']['quiz']['qs_id'],$final_result['result_percentage']);
+
 	}
 }
 
 
 //if(isset($_POST['submit-quiz-question'])) {
 if(isset($_POST['begin_time'])) {
+	
 	$_POST = array_map('addslashes',$_POST);
     $_POST = array_map('htmlentities',$_POST);
 	$lapse_time = time() - $_POST['begin_time'];
@@ -94,10 +104,12 @@ if(isset($_POST['begin_time'])) {
 	$answer_sl_array = $_POST;
 	$answer_sl = serialize($_POST);
 	$score ='0.00';
-	//pr($_POST,1);
+	//echo "printing post";
+	//pr($_POST);
 	if(isset($_SESSION['user']['quiz']['qs_id']) && $_SESSION['user']['quiz']['qs_id'] > 0)
 	{
-		$query1 = "UPDATE quiz_score SET lapse_time = {$lapse_time},answer_sl ='{$answer_sl}',active = {$active} WHERE qs_id = {$_SESSION['user']['quiz']['qs_id']}";
+		echo $query1 = "UPDATE quiz_score SET lapse_time = {$lapse_time},answer_sl ='{$answer_sl}',active = {$active} WHERE qs_id = {$_SESSION['user']['quiz']['qs_id']}";
+		//exit;
 		$result1 = mysqli_query($db, $query1);
 		if ( false === $result ) {
 		  // Query failed. Print out information.
@@ -113,7 +125,9 @@ if(isset($_POST['begin_time'])) {
 	}
 	else
 	{
-		$query2 = "INSERT INTO quiz_score (user_id, quiz_id,score,lapse_time,answer_sl) VALUES ( {$user_id},{$quiz_id}, {$score},{$lapse_time},'{$answer_sl}' )";
+		echo $query2 = "INSERT INTO quiz_score (user_id, quiz_id,score,lapse_time,answer_sl,active) VALUES ( {$user_id},{$quiz_id}, {$score},{$lapse_time},'{$answer_sl}','{$active}' )";
+		//exit;
+		
 		$result2 = mysqli_query($db, $query2);
 		if($result2 && mysqli_affected_rows($db) != -1) {
 			  // Success
@@ -162,7 +176,7 @@ if(isset($_POST['begin_time'])) {
           <div class="table-responsive">
             <form  action="" method="post" id="myform" name ="myform">
 			<input type="hidden" value="<?php echo $begin_time;?>" name="begin_time" id ="begin_time" >
-			<input type="hidden" value="1" name="active" id ="active" >
+			<input type="hidden" value="<?php echo $active;?>" name="active" id ="active" >
             <table class="table table-bordered table-hover table-striped tablesorter">
               <thead>
                 <tr>
@@ -239,7 +253,7 @@ if(isset($_POST['begin_time'])) {
 			 ?>
                 <div style="float:left;margin-right:500px;"><a class="btn btn-danger" data-toggle="modal" data-target="#confirm-delete-modal" >Complete Quiz</a></div> 
                    
-               <button type ="submit" id="submit-quiz-question" name="submit-quiz-question" value="submit-quiz-question" class="btn btn-primary" >Submit Answer</button>
+               
               <?php } ?>
              </div>
             </form>
@@ -279,53 +293,23 @@ if(isset($_POST['begin_time'])) {
 
 function getFormSubmit()
 {
-
 		document.getElementById('active').value = 0;
 		document.getElementById('myform').submit();
+		 
 }	
 
-var Example1 = new (function() {
-    var $stopwatch, // Stopwatch element on the page
-        incrementTime = 70, // Timer speed in milliseconds
-        currentTime = <?php echo $lapsetime = (isset($quiz_score['lapse_time']) && $quiz_score['lapse_time'] > 0)?$quiz_score['lapse_time']*100:0;?>, // Current time in hundredths of a second
-        updateTimer = function() {
-            $stopwatch.html(formatTime(currentTime));
-            currentTime += incrementTime / 10;
-        },
-        init = function() {
-            $stopwatch = $('#stopwatch');
-            Example1.Timer = $.timer(updateTimer, incrementTime, true);
-        };
-    this.resetStopwatch = function() {
-        currentTime = 0;
-        this.Timer.stop().once();
-    };
-    this.rsstop = function() {
-        //currentTime = 0;
-        this.Timer.stop().once();
-    };
-    $(init);
+$('#stopwatch').timer({
+			duration: '40s',
+			format: '%M : %S',
+			countdown: true,
+			callback: function() {
+				
+				$('#stopwatch').timer('pause');
+				getFormSubmit();
+			}
 });
 
-var count = 0,
-    timer = $.timer(function() {
-        count++;
-        $('#counter').html(count);
-    });
-timer.set({ time : 1000, autostart : false });
 
-// Common functions
-function pad(number, length) {
-    var str = '' + number;
-    while (str.length < length) {str = '0' + str;}
-    return str;
-}
-function formatTime(time) {
-    var min = parseInt(time / 6000),
-        sec = parseInt(time / 100) - (min * 60),
-        hundredths = pad(time - (sec * 100) - (min * 6000), 2);
-    return (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2) + ":" + hundredths;
-}
 
 $(window).scroll(function(){
   //$("#tbp-panel").css({"margin-top": ($(window).scrollTop()) + "px", "margin-left":($(window).scrollLeft()) + "px"});
@@ -335,7 +319,7 @@ $(window).scroll(function(){
 <?php if($active == 0){ ?>
 <script type='text/javascript'>
 $( document ).ready(function() {
-	Example1.rsstop();
+	$('#stopwatch').timer('remove');
 });
 </script>
 <?php } ?>
