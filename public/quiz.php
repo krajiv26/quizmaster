@@ -5,6 +5,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors",1);
 //pr($_SESSION,1);
+
 $cat = get_all_category();
 if(isset($_GET['quiz_id'])) $_SESSION['user']['quiz']['quiz_id'] = $_GET['quiz_id'];
 
@@ -24,6 +25,8 @@ else
 $questions_list = get_quiz_questions($quiz_id); 
 $allowedTime = get_allowed_time($quiz_id); 
 $total = $questions_list->num_rows;
+$allowedtime = get_quiz_allowedTime($quiz_id);
+
 /*
 parse_str($_SERVER["QUERY_STRING"], $output);
 unset($output['page']);
@@ -299,9 +302,12 @@ function getFormSubmit()
 }	
 
 $('#stopwatch').timer({
-			duration: '40s',
-			format: '%M : %S',
+			<?php if($allowedtime > 0){ ?>
+			duration: '<?php echo $allowedtime; ?>m',
 			countdown: true,
+			<?php }  ?>
+			format: '%M : %S',
+			
 			callback: function() {
 				
 				$('#stopwatch').timer('pause');

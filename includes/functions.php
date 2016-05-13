@@ -379,6 +379,26 @@ ini_set("display_errors",1);
 		}
 	}
 	
+	function get_quiz_allowedTime($qs_id) {
+		global $db;
+
+		// Sanitize input parameter prior to making query
+		$safe_user_id = mysqli_real_escape_string($db, $qs_id);
+
+		$query 	= "SELECT * ";
+		$query .= "FROM quiz ";
+		$query .= "WHERE quiz_id = {$qs_id} ";
+		$query .= "LIMIT 1";
+		
+		$user_set = mysqli_query($db, $query);
+		confirm_query($user_set);
+		if($user = mysqli_fetch_assoc($user_set)) {
+			return $user['allowed_time'];
+		} else {
+			return null;
+		}
+	}
+	
 	function get_user_by_id($user_id) {
 		global $db;
 
