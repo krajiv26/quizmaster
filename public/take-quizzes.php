@@ -4,7 +4,15 @@
 <?php $page = "take-quizzes.php"; ?>
 
 <!-- Query database for all users -->
-<?php $quiz_list = get_all_quizzes(); 
+<?php 
+$quiz_list = get_all_quizzes();
+if($_SESSION["user"]["user_type"] == "student"){
+	if(isset($_SESSION["examcode"]) && $_SESSION["examcode"] != "")	$quiz_list = get_all_quizzes($_SESSION["examcode"]); 
+}
+
+
+
+
 if(isset($_SESSION['user']['quiz'])) unset($_SESSION['user']['quiz']);
 ?>
 
@@ -65,6 +73,7 @@ if(isset($_SESSION['user']['quiz'])) unset($_SESSION['user']['quiz']);
                   
                   <th>Quiz Name <i class="fa fa-sort"></i></th>
                   <th width="10%">Category</th>
+                  <th width="10%">Code</th>
                   <th width="15%">Quiz Deadline</i></th>
                   <th>Q Cnt </th>
                   <th>Last Score</th>
@@ -76,14 +85,13 @@ if(isset($_SESSION['user']['quiz'])) unset($_SESSION['user']['quiz']);
               <tbody id="user-rows">     
 
               <?php
-
                 while($row = mysqli_fetch_assoc($quiz_list)) {
-
               ?>
 
                   <tr>
                     <td><?php echo $row['quiz_name']; ?></td>
                     <td><?php echo $row['category']; ?></td>
+                    <td><?php echo $row['quiz_code']; ?></td>
                     <td><?php if($row['deadline']) { echo $row['deadline']; } else { echo 'NO DEADLINE SET'; } ?></td>
                     <td><?php echo get_quiz_question_count($row['quiz_id']); ?></td>
                     <td>
@@ -99,6 +107,7 @@ if(isset($_SESSION['user']['quiz'])) unset($_SESSION['user']['quiz']);
                   </tr>
 
               <?php
+				
                 }
               ?>
               

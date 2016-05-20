@@ -63,10 +63,11 @@
                   
                   <th>Quiz Name <i class="fa fa-sort"></i></th>
                   <th width="10%">Category</th>
+                  <th width="10%">Code</th>
                   <th width="15%">Quiz Deadline</i></th>
                   <th>Q Cnt </th>
                   <th>Scores</th>
-                  <th>Assign Group</th>
+                  <th width="10%">Assign Group</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>
@@ -81,6 +82,7 @@
                   <tr>
                     <td><?php echo $row['quiz_name']; ?></td>
                     <td><?php echo $row['category']; ?></td>
+                    <td><?php echo $row['quiz_code']; ?></td>
                     <td><?php if($row['deadline']) { echo $row['deadline']; } else { echo 'NO DEADLINE SET'; } ?></td>
                     <td><?php echo get_quiz_question_count($row['quiz_id']); ?></td>
                     <td>

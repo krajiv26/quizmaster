@@ -38,7 +38,7 @@
       }
     }
 
-    $fields_required = array("quiz_name", "category", "attempts");
+    $fields_required = array("quiz_name", "category", "quiz_code","attempts");
     foreach($fields_required as $field) {
       $value = trim($_POST[$field]);
       if(!has_presence($value)) {
@@ -56,7 +56,8 @@
       $quiz_id      = $id;
       $quiz_name    = $_POST['quiz_name'];
       $category     = $_POST['category'];
-      $allowedTime     = $_POST['allowed_time'];
+      $quiz_code    = $_POST['quiz_code'];
+      $allowedTime  = $_POST['allowed_time'];
       $deadline     = $_POST['deadline'];
       $attempts     = $_POST['attempts'];
 
@@ -68,7 +69,8 @@
         $query .= "category = '{$category}', ";
         $query .= "allowed_time = '{$allowedTime}', ";
         $query .= "deadline = NULL, ";
-        $query .= "attempts = '{$attempts}' ";
+        $query .= "attempts = '{$attempts}', ";
+        $query .= "quiz_code = '{$quiz_code}' ";
         $query .= "WHERE quiz_id = {$quiz_id} ";
         $query .= "LIMIT 1";
       } else {
@@ -77,12 +79,11 @@
         $query .= "category = '{$category}', ";
         $query .= "allowed_time = '{$allowedTime}', ";
         $query .= "deadline = '{$deadline}', ";
+        $query .= "quiz_code = '{$quiz_code}', ";
         $query .= "attempts = '{$attempts}' ";
         $query .= "WHERE quiz_id = {$quiz_id} ";
         $query .= "LIMIT 1";
       }
-      
-      
       
 
       $result = mysqli_query($db, $query); 
@@ -161,6 +162,10 @@
                 <div class="form-group col-lg-3">
                   <label for="category" class="control-label">Quiz Category</label>
                   <input type="text" class="form-control" id="category" value="<?php echo $quiz["category"]; ?>" name="category" placeholder="Quiz Category (ex. CINS 370)">
+                </div>
+                <div class="form-group col-lg-3">
+                  <label for="deadline" class="control-label">Quiz Code*</label>
+                  <input type="text" class="form-control" id="quiz_code" value="<?php echo $quiz["quiz_code"]; ?>" name="quiz_code" placeholder="ZILDUE0127">
                 </div>
                 <div class="form-group col-lg-3">
                   <label for="deadline" class="control-label">Allowed Time(Minutes)</label>

@@ -478,12 +478,14 @@ ini_set("display_errors",1);
 		}
 	}
 
-	function get_all_quizzes() {
+	function get_all_quizzes($quiz_code = "") {
 		global $db;
 
-	  	$query  = "SELECT *";
-	  	$query .= "FROM quiz WHERE is_deleted = 0";
-                
+	  	if($quiz_code != "")
+	  	 $query  = "SELECT * FROM quiz WHERE quiz_code = '{$quiz_code}' AND is_deleted = 0";
+	  	else
+	  	 $query  = "SELECT * FROM quiz WHERE is_deleted = 0";
+	  	       
 	  	$result = mysqli_query($db, $query);
 	  	confirm_query($result);
 
@@ -946,4 +948,27 @@ ini_set("display_errors",1);
       return false;
       
   }
+  
+  function isUserExists($user_id)
+  {
+	  global $db;
+
+		// Sanitize input parameter prior to making query
+		$safe_user_id = mysqli_real_escape_string($db, $user_id);
+
+		$query 	= "SELECT * ";
+		$query .= "FROM user ";
+		$query .= "WHERE username = {$safe_user_id} ";
+		$query .= "LIMIT 1";
+		$user_set = mysqli_query($db, $query);
+		if($user_set && $user_set->num_rows == 1) {
+			return true;
+	    }
+	    else{
+			return false;
+		}
+	    
+	  
+  }
+  
 ?>

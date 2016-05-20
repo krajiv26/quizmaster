@@ -20,7 +20,7 @@
     }
 
     // Validate New User Form inputs
-    $fields_required = array("quiz_name", "category", "attempts");
+    $fields_required = array("quiz_name", "category", "attempts","quiz_code");
     foreach($fields_required as $field) {
       $value = trim($_POST[$field]);
       if(!has_presence($value)) {
@@ -38,6 +38,8 @@
       $form_values = array("quiz_name" => $_POST['quiz_name'],
                            "category" => $_POST['category'],
                            "deadline" => $_POST['deadline'],
+                           "quiz_code" => $_POST['quiz_code'],
+                           "allowed_time" => $_POST['allowed_time'],
                            "attempts" => $_POST['attempts']);
       $_SESSION["form_history"] = $form_values;
 
@@ -51,21 +53,23 @@
     $quiz_name   = $_POST['quiz_name'];
     $category = $_POST['category'];
     $deadline = $_POST['deadline'];
+    $quiz_code = $_POST['quiz_code'];
+    $allowedtime = $_POST['allowed_time'];
     $attempts = $_POST['attempts'];
 
 
     
     if($deadline != '') {
       $query  = "INSERT INTO quiz (";
-      $query .= "  quiz_name, category, deadline, attempts";
+      $query .= "  quiz_name, category, deadline, allowed_time, quiz_code, attempts";
       $query .= ") VALUES (";
-      $query .= "  '{$quiz_name}', '{$category}', '{$deadline}', '{$attempts}'";
+      $query .= "  '{$quiz_name}', '{$category}', '{$deadline}', '{$allowedtime}','{$quiz_code}', '{$attempts}'";
       $query .= ")";
     } else {
       $query  = "INSERT INTO quiz (";
-      $query .= "  quiz_name, category, attempts";
+      $query .= "  quiz_name, category, allowed_time, quiz_code, attempts";
       $query .= ") VALUES (";
-      $query .= "  '{$quiz_name}', '{$category}', '{$attempts}'";
+      $query .= "  '{$quiz_name}', '{$category}', '{$allowedtime}','{$quiz_code}', '{$attempts}'";
       $query .= ")";
     }
     

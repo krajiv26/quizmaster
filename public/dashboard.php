@@ -1,7 +1,7 @@
 <?php require_once("../includes/sessions.php"); ?>
 <?php require_once("../includes/functions.php"); ?>
 <?php include('../includes/layouts/header.php'); ?>
-<?php $page = "dashboard.php"; ?>
+<?php $page = "dashboard.php";  ?>
 
 <body>
 
@@ -16,7 +16,11 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <?php include("../includes/layouts/admin-side-nav.php"); ?>
 
-      <?php include('../includes/layouts/admin-profile.php'); ?>
+      <?php include('../includes/layouts/admin-profile.php'); 
+      
+     //pr($_SESSION,1);
+      
+      ?>
     </div><!-- /.navbar-collapse -->
   </nav>
   <div id="page-wrapper">

@@ -59,7 +59,7 @@
           <div class="panel-body">
              <form class="form-horizontal" role="form" action="process-new-quiz.php" method="post">
               <div class="form-group">
-                <label for="quiz_name" class="col-lg-2 control-label">Quiz Name</label>
+                <label for="quiz_name" class="col-lg-2 control-label">Quiz Name*</label>
                 <div class="col-lg-10">
                   <input type="text" class="form-control" id="quiz_name" name="quiz_name" placeholder="Quiz Name">
                 </div>
@@ -74,6 +74,18 @@
                 <label for="deadline" class="col-lg-2 control-label">Quiz Deadline</label>
                 <div class="col-lg-10">
                   <input type="text" class="form-control" id="deadline" name="deadline" placeholder="2014-05-15 23:59:59">
+                </div>
+              </div>
+               <div class="form-group">
+                <label for="attempts" class="col-lg-2 control-label">Quiz Code*</label>
+                <div class="col-lg-10">
+                  <input type="text" class="form-control" id="quiz_code" name="quiz_code" placeholder="ZDEKDL0293">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="attempts" class="col-lg-2 control-label">Allowed Time(Minutes)</label>
+                <div class="col-lg-10">
+                  <input type="text" class="form-control" id="allowed_time" name="allowed_time" placeholder="1">
                 </div>
               </div>
               <div class="form-group">
