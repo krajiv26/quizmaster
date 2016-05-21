@@ -24,7 +24,10 @@
     <?php echo user_form_failure_msg(); ?>
 	<div class="clearfix"></div>
     <div class="container" style="width:50%">
-        <p></p>
+		<strong>Available Exam Code</strong><br>
+		<label style="width: 100%;height: 34px;padding: 6px 12px;font-size: 14px;line-height: 1.42857143;color: #555;background-color: #fff;background-image: none;border: 1px solid #ccc;border-radius: 4px;"><?php echo get_examcodes()?></label>
+        
+		<p></p>
         <form class="form-signin" method="post" action="student-register-login.php">
         <h2 class="form-signin-heading">Please input your details</h2>
 		<br/><strong>First Name*</strong>

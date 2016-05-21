@@ -67,9 +67,10 @@
                   <th width="15%">Quiz Deadline</i></th>
                   <th>Q Cnt </th>
                   <th>Scores</th>
-                  <th width="10%">Assign Group</th>
+                  <th >Assign Group</th>
                   <th>Edit</th>
                   <th>Delete</th>
+                  <th>Send Code</th>
                 </tr>
               </thead>
               <tbody id="user-rows">     
@@ -96,6 +97,9 @@
                     </td>
                     <td>
                         <a data-toggle="modal" data-target="#confirm-delete-modal<?php echo htmlentities($row['quiz_id']); ?>"><i class="fa fa-trash-o fa-2x"></i> Delete</a>
+                    </td>
+                    <td>
+                        <a href="send-quiz.php?quiz_id=<?php echo htmlentities($row['quiz_id']); ?>" ><i class="fa fa-edit fa-2x"></i>Send Code</a>                
                     </td>
                   </tr>
 

@@ -971,4 +971,22 @@ ini_set("display_errors",1);
 	  
   }
   
+  function get_examcodes() {
+		global $db;
+
+		$query 	= "SELECT * ";
+		$query .= "FROM quiz ";
+		$query .= "WHERE show_code = 1 ";
+		
+		$result = mysqli_query($db, $query);
+		confirm_query($result);
+		$examcode = array();
+		while ($row = mysqli_fetch_assoc($result)) {
+			$examcode[] = $row['quiz_code'];
+		}
+		return implode(" | ",$examcode);
+	}
+  
+  
+  
 ?>
