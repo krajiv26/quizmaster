@@ -48,7 +48,7 @@
     $_POST = array_map('htmlentities',$_POST);
     
     $username        = $_POST['username'];
-    $password     = $_POST['password'];
+    $password     = md5($_POST['password']);
 
 	$query  = "SELECT * FROM `user` WHERE `username` = '{$username}' AND `password` = '{$password}'";
 	

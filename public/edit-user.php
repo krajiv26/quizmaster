@@ -22,16 +22,17 @@
 
     // Validate Edit User Form inputs
     $fields_with_max_lengths = array("first_name" => 30, "last_name" => 30,
-                                      "username" => 20, "email" => 30, "password" => 16);
+                                      "username" => 20, "email" => 30);
     foreach($fields_with_max_lengths as $field => $max) {
       $value = trim($_POST[$field]);
+
       if(!value_within_range($value, 1, $max)) {
         $error_messages[$field] = ucfirst($field) . " is too long.";
       }
     }
 
     $fields_required = array("first_name", "last_name", "username",
-                              "email", "password");
+                              "email");
     foreach($fields_required as $field) {
       $value = trim($_POST[$field]);
       if(!has_presence($value)) {
@@ -55,20 +56,30 @@
       $last_name    = $_POST['last_name'];
       $username     = $_POST['username'];
       $email        = $_POST['email'];
-      $password     = $_POST['password'];
+      $password     = md5($_POST['password']);
       $user_type    = $_POST['user_type'];
       
-
-      $query  = "UPDATE user SET ";
-      $query .= "first_name = '{$first_name}', ";
-      $query .= "last_name = '{$last_name}', ";
-      $query .= "username = '{$username}', ";
-      $query .= "email = '{$email}', ";
-      $query .= "password = '{$password}', ";
-      $query .= "user_type = '{$user_type}' ";
-      $query .= "WHERE user_id = {$user_id} ";
-      $query .= "LIMIT 1";
-
+	  if(isset($_POST['password']) && $_POST['password'] != "") {
+		  $query  = "UPDATE user SET ";
+		  $query .= "first_name = '{$first_name}', ";
+		  $query .= "last_name = '{$last_name}', ";
+		  $query .= "username = '{$username}', ";
+		  $query .= "email = '{$email}', ";
+		  $query .= "password = '{$password}', ";
+		  $query .= "user_type = '{$user_type}' ";
+		  $query .= "WHERE user_id = {$user_id} ";
+		  $query .= "LIMIT 1";
+      }
+      else {
+		  $query  = "UPDATE user SET ";
+		  $query .= "first_name = '{$first_name}', ";
+		  $query .= "last_name = '{$last_name}', ";
+		  $query .= "username = '{$username}', ";
+		  $query .= "email = '{$email}', ";
+		  $query .= "user_type = '{$user_type}' ";
+		  $query .= "WHERE user_id = {$user_id} ";
+		  $query .= "LIMIT 1";
+	  }
       $result = mysqli_query($db, $query);
 
       if($result && mysqli_affected_rows($db) == 1) {
@@ -159,7 +170,7 @@
           <!-- Password input-->
           <div class="form-group">
             <label for="password">Password</label>
-              <input class="form-control" id="password" name="password" type="password" value="<?php echo $user["password"]; ?>"placeholder="Create a Password" class="input-xlarge">
+              <input class="form-control" id="password" name="password" type="password" value="" placeholder="Create a Password" class="input-xlarge">
           </div>
 
           <!-- Select Basic -->

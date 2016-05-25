@@ -10,7 +10,7 @@
     // The New User Form was submitted
 
     $fields_with_max_lengths = array("first_name" => 30, "last_name" => 30,
-                                      "username" => 20, "email" => 30, "password" => 16);
+                                      "username" => 20, "email" => 30);
     foreach($fields_with_max_lengths as $field => $max) {
       $value = trim($_POST[$field]);
       if(!value_within_range($value, 1, $max)) {
@@ -56,7 +56,7 @@
     $last_name    = $_POST['last_name'];
     $username     = $_POST['username'];
     $email        = $_POST['email'];
-    $password     = $_POST['password'];
+    $password     = md5($_POST['password']);
     $user_type    = $_POST['user_type'];
     
 
